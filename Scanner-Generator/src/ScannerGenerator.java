@@ -18,14 +18,27 @@ public class ScannerGenerator {
 
 		try {
 
-			String sCurrentLine;
+			String currLine;
 
 			specReader = new BufferedReader(new FileReader(specFile));
 
 			//tokenize the spec line by line
-			while ((sCurrentLine = specReader.readLine()) != null) {
-				System.out.println(sCurrentLine);
+			while ((currLine = specReader.readLine()) != null) {
+				System.out.println(currLine);
+				//Read in spec and generate primitive NFA for each character class
+
+				//combine all NFA's
+				
+				//Convert NFA's to DFATable
+				DFATable dfa = new DFATable();
+				
+				
+				//Create Table Walker
+				TableWalker tw = new TableWalker(dfa);
+				tw.scan(inputFile);
 			}
+		
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
