@@ -10,3 +10,5 @@ Clone the repository
 $ git clone git@github.com:tomelm/scanner-generator.git
 $ cd scanner-generator
 ```
+
+## Test
