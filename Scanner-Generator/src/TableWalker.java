@@ -15,6 +15,7 @@ public class TableWalker {
 	
 	public File scan(String input){
 		inputFile = new File(input);
+			
 		
 		
 		return outputFile;
