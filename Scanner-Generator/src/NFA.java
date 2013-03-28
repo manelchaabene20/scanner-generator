@@ -3,9 +3,11 @@ import java.util.ArrayList;
 public class NFA {
 	private String name;
 	private int[][] NFAtable;
+	private ArrayList<Character> acceptedChars;
 
 	public NFA(String name, String regex) throws Exception {
 		this.name = name;
+		acceptedChars = new ArrayList<Character>();
 		NFAtable = parse(regex);
 	}
 
@@ -20,8 +22,7 @@ public class NFA {
 		int state = 0;
 		int index = 0;
 		char c;
-		ArrayList<Character> acceptedChars = new ArrayList<Character>();
-
+		
 		c = regex.charAt(index);
 
 		/* Figure out accepted characters in a [] character class */

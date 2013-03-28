@@ -30,7 +30,6 @@ public class ScannerGenerator {
 				String var = currLine.substring(0, currLine.indexOf(" "));
 				String regex = currLine.substring(currLine.indexOf(" ")+1);
 				
-				System.out.println(var+": "+regex);
 				
 				NFA nfa = new NFA(var, regex);
 				nfas.add(nfa);
