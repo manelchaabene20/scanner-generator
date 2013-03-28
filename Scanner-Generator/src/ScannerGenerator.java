@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Scanner Generator reads in a spec files that 
@@ -17,6 +18,8 @@ public class ScannerGenerator {
 
 		String currLine;
 
+		ArrayList<NFA> nfas = new ArrayList<NFA>();
+		
 		/* Tokenize the spec line by line */
 		while ((currLine = specReader.readLine()) != null) {
 			System.out.println(currLine);
@@ -28,6 +31,9 @@ public class ScannerGenerator {
 				String regex = currLine.substring(currLine.indexOf(" ")+1);
 				
 				System.out.println(var+": "+regex);
+				
+				NFA nfa = new NFA(var, regex);
+				nfas.add(nfa);
 			}
 
 			
