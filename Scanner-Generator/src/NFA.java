@@ -197,24 +197,20 @@ public class NFA {
 	
 	@SuppressWarnings("unchecked")
 	public static NFA union(NFA nfa1, NFA nfa2){
-		
+		ArrayList<Character> arr = new ArrayList<Character>();
 		Node start = new Node();
 		for(Node n : nfa1.startState.getSuccessors()){
-			start.addSuccessor(n);
+			for(Character c : n.transitionChars){
+				arr.add(c);
+			}
 		}
 		for(Node n : nfa2.startState.getSuccessors()){
-			start.addSuccessor(n);
-		}
-		Node end = new Node();
-		end.accept = true;
-		Node node = new Node();
-		for(Node n : start.getSuccessors()){
-			node = n;
-			while(node.accept == false){
-				node = node.getSuccessors().get(0);
+			for(Character c : n.transitionChars){
+				arr.add(c);
 			}
-			node = end;
 		}
+		Node end = new Node(arr,true);
+		start.addSuccessor(end);
 		return new NFA(start);
 	}
 	
