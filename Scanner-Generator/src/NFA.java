@@ -5,8 +5,8 @@ public class NFA {
 	private int[][] NFAtable;
 	private ArrayList<Character> acceptedChars;
 	private ArrayList<Node> starterNodes;
-	NFA prev;
-	Node startState;
+	private NFA prev;
+	private Node startState;
 
 	public NFA(String name) throws Exception{
 		this.name = name;
@@ -142,19 +142,26 @@ public class NFA {
 	}
 
 	public void print() {
+		
 		for(Node n : this.startState.getSuccessors())
 		{
 			System.out.println(n.transitionChars);
 		}
 	}
+	
 	public ArrayList<Character> getAcceptedChars(){
 		return this.acceptedChars;
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		
-		NFA nfa = new NFA("$CHAR", "[A-z]");
+		NFA nfa = new NFA("$CHAR", "[0-9]");
 
-		NFA nfa2 = new NFA("$Upper", "[^a-z]", nfa);
+		NFA nfa2 = new NFA("$Upper", "[^0]", nfa);
 		nfa2.print();
 	}
 
