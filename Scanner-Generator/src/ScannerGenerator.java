@@ -34,16 +34,34 @@ public class ScannerGenerator {
 
 	
 				
-				NFA nfa;
 				if (currLine.indexOf(" IN ") != -1) {
-					String name = currLine.substring(currLine.indexOf(" IN ") + 4);
-					NFA prev = nfas.get(name);
-					nfa = new NFA(var, regex, prev);
-				} else {
-					nfa = new NFA(var, regex);
-				}
+
 			
-				nfas.put(nfa.getName(), nfa);
+
+					System.out.println(" INN");
+					regex = regex.substring(0, regex.indexOf(" IN "));
+					String name = currLine.substring(currLine.indexOf(" IN ") + 4);
+
+					NFA prev = nfas.get(name);
+					NFA nfa = new NFA(var, regex, prev);
+					nfas.put(var, nfa);
+				} else {
+					
+					NFA nfa = new NFA(var, regex);
+					nfas.put(var, nfa);
+				}
+
+			
+			
+
+				
+				for (String name : nfas.keySet()) {
+					System.out.println(name);
+					NFA nfa = nfas.get(name);
+					nfa.print();
+				}
+				System.out.println("--------------------------------------");
+
 			}
 
 			/* Combine all NFA's */
