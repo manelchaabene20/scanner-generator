@@ -5,7 +5,7 @@ public class NFA {
 	private int[][] NFAtable;
 	private ArrayList<Character> acceptedChars;
 	private ArrayList<Node> starterNodes;
-	private NFA prev;
+	private ArrayList<Character> prev;
 	private Node startState;
 
 	public NFA(String name) throws Exception{
@@ -17,7 +17,7 @@ public class NFA {
 	public NFA(String name, String regex) throws Exception {
 		this.name = name;
 		acceptedChars = new ArrayList<Character>();
-		this.startState = parse(regex);
+		this.startState = parse(regex,0);
 		
 		
 	}
@@ -25,67 +25,13 @@ public class NFA {
 	public NFA(String name, String regex, NFA prev) throws Exception {
 		this.acceptedChars = new ArrayList<Character>();
 		this.name = name;
-		this.prev = prev;
-		this.startState = parseIN(regex);
+		this.prev = (ArrayList<Character>) prev.getAcceptedChars().clone();
+		this.startState = parse(regex,1);
 		
 	
 	}
-	public Node parseIN(String regex) throws Exception {
-		int state = 0;
-		int index = 0;
-		char c;
-		c = regex.charAt(index);
-		if (c == '[') {
-			c = regex.charAt(++index);
-			boolean accepted = true;
-			if (c == '^') {
-				accepted = true;
-			}
-			while (c != ']') {
-				if (c == '-') {
-					char start = acceptedChars.get(acceptedChars.size() - 1);
-					char end = regex.charAt(index + 1);
 
-					if (start > end) {
-						throw new Exception("Range is invalid.");
-					}
-
-					for (int i = (int) start + 1; i < (int) end; i++) {
-						acceptedChars.add((char) i);
-					}
-				} else if (c == '\\') { // NOTE: have to escape the \ char in
-										// Java
-					c = regex.charAt(++index);
-					acceptedChars.add(c);
-				} else { // All other characters
-					acceptedChars.add(c);
-				}
-				if (c != ']')
-					c = regex.charAt(++index);
-			}
-			if (accepted == false) { // We have a ^
-				ArrayList<Character> actualAcceptedChars = new ArrayList<Character>();
-				for (int i = 0; i < 256; i++) { // Loop through all possible
-												// chars
-					if (!acceptedChars.contains((char) i)) {
-						actualAcceptedChars.add((char) i);
-					}
-				}
-				acceptedChars = actualAcceptedChars;
-			}
-			index++; // Increment past ']'
-		}
-		ArrayList<Character> largerList = this.prev.getAcceptedChars();
-		for(Character ch : acceptedChars){
-			largerList.remove(ch);
-		}
-		Node node = new Node();
-		this.acceptedChars = largerList;
-		node.addSuccessor(new Node(largerList,true));
-		return node;
-	
-	}
-	public Node parse(String regex) throws Exception {
+	public Node parse(String regex, int method) throws Exception {
 
 		/* Parsing genius code */
 		int state = 0;
@@ -95,7 +41,7 @@ public class NFA {
 		c = regex.charAt(index);
 
 		/* Figure out accepted characters in a [] character class */
-		
+		if(method == 0){
 			if (c == '[') {
 				c = regex.charAt(++index);
 				boolean accepted = true;
@@ -141,7 +87,58 @@ public class NFA {
 			Node node = new Node();
 			node.addSuccessor(new Node(acceptedChars,true));
 			return node;
-		
+		}
+		else if(method == 1){
+			if (c == '[') {
+				c = regex.charAt(++index);
+				boolean accepted = true;
+				if (c == '^') {
+					accepted = true;
+				}
+				while (c != ']') {
+					if (c == '-') {
+						char start = acceptedChars.get(acceptedChars.size() - 1);
+						char end = regex.charAt(index + 1);
+	
+						if (start > end) {
+							throw new Exception("Range is invalid.");
+						}
+	
+						for (int i = (int) start + 1; i < (int) end; i++) {
+							acceptedChars.add((char) i);
+						}
+					} else if (c == '\\') { // NOTE: have to escape the \ char in
+											// Java
+						c = regex.charAt(++index);
+						acceptedChars.add(c);
+					} else { // All other characters
+						acceptedChars.add(c);
+					}
+					if (c != ']')
+						c = regex.charAt(++index);
+				}
+				if (accepted == false) { // We have a ^
+					ArrayList<Character> actualAcceptedChars = new ArrayList<Character>();
+					for (int i = 0; i < 256; i++) { // Loop through all possible
+													// chars
+						if (!acceptedChars.contains((char) i)) {
+							actualAcceptedChars.add((char) i);
+						}
+					}
+					acceptedChars = actualAcceptedChars;
+				}
+				index++; // Increment past ']'
+			}
+			ArrayList<Character> largerList = this.prev;
+			for(Character ch : acceptedChars){
+				largerList.remove(ch);
+			}
+			Node node = new Node();
+			node.addSuccessor(new Node(largerList,true));
+			return node;
+		}
+		else
+			return null;
 	}
 
 	public void print() {
@@ -162,12 +159,9 @@ public class NFA {
 	
 	public static void main(String[] args) throws Exception {
 		
+		NFA nfa = new NFA("$CHAR", "[0-9]");
 
-		NFA nfa = new NFA("$CHAR", "[a-zA-Z]");
-
-		NFA nfa2 = new NFA("$Lower", "[^A-Z]", nfa);
-
-
+		NFA nfa2 = new NFA("$Upper", "[^0]", nfa);
 		nfa2.print();
 	}
 
