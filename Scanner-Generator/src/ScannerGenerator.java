@@ -20,7 +20,6 @@ public class ScannerGenerator {
 		String currLine;
 
 		HashMap<String, NFA> nfas = new HashMap<String, NFA>();
-		
 
 		/* Tokenize the spec line by line */
 		while ((currLine = specReader.readLine()) != null) {
@@ -32,8 +31,6 @@ public class ScannerGenerator {
 				String regex = currLine.substring(currLine.indexOf(" ") + 1);
 
 
-	
-				
 				if (currLine.indexOf(" IN ") != -1) {
 					regex = regex.substring(0, regex.indexOf(" IN "));
 					String name = currLine.substring(currLine.indexOf(" IN ") + 4);
@@ -41,7 +38,13 @@ public class ScannerGenerator {
 					NFA prev = nfas.get(name);
 					NFA nfa = new NFA(var, regex, prev);
 					nfas.put(var, nfa);
-				} else {
+				} 
+				else if(regex.indexOf(" ") != -1 || regex.indexOf("(") != -1){
+					System.out.println(currLine);
+					RecursiveDescentParser parser = new RecursiveDescentParser(nfas);
+					nfas.put(var, parser.next(regex));
+				}
+				else {
 					
 					NFA nfa = new NFA(var, regex);
 					nfas.put(var, nfa);
