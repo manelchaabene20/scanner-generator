@@ -19,56 +19,74 @@ public class ScannerGenerator {
 
 		String currLine;
 
-		HashMap<String, NFA> nfas = new HashMap<String, NFA>();
+		HashMap<String, NFA> characterClassNfas = new HashMap<String, NFA>();
+		HashMap<String, NFA> tokenNfas = new HashMap<String, NFA>();
 
+		boolean token = false;
 		/* Tokenize the spec line by line */
 		while ((currLine = specReader.readLine()) != null) {
 
+			if(currLine.equals("")){
+				token = true;
+				continue;
+			}
+			
 			/* Read in spec and generate primitive NFA for each character class */
-			if (!currLine.equals("")) {
-				
+			if (token == false) {
+
 				String var = currLine.substring(0, currLine.indexOf(" "));
 				String regex = currLine.substring(currLine.indexOf(" ") + 1);
 
-
+				/* Contains IN */
 				if (currLine.indexOf(" IN ") != -1) {
 					regex = regex.substring(0, regex.indexOf(" IN "));
-					String name = currLine.substring(currLine.indexOf(" IN ") + 4);
+					String name = currLine
+							.substring(currLine.indexOf(" IN ") + 4);
 
-					NFA prev = nfas.get(name);
+					NFA prev = characterClassNfas.get(name);
 					NFA nfa = new NFA(var, regex, prev);
-					nfas.put(var, nfa);
-				} 
-				else if(regex.indexOf(" ") != -1 || regex.indexOf("(") != -1){
-					System.out.println(currLine);
-					RecursiveDescentParser parser = new RecursiveDescentParser(nfas);
-					nfas.put(var, parser.next(regex));
-				}
-				else {
-					
+					characterClassNfas.put(var, nfa);
+				} else {
+					/* Simple primitive NFA */
 					NFA nfa = new NFA(var, regex);
-					nfas.put(var, nfa);
+					characterClassNfas.put(var, nfa);
 				}
-
-
+			} else {
+				
+				/* Tokens */
+				String var = currLine.substring(0, currLine.indexOf(" "));
+				String regex = currLine.substring(currLine.indexOf(" ") + 1);
+				
+				System.out.println(currLine);
+				RecursiveDescentParser parser = new RecursiveDescentParser(characterClassNfas);
+				tokenNfas.put(var, parser.next(regex));
 			}
-
-			/* Combine all NFA's */
-
-			/* Convert NFA's to DFATable */
-			DFATable dfa = new DFATable();
-
-			/* Create Table Walker */
-			TableWalker tw = new TableWalker(dfa);
-			tw.scan(inputFile);
 		}
+		
 
-		for (String name : nfas.keySet()) {
+		/* Combine all NFA's */
+		
+
+		/* Convert NFA's to DFATable */
+		DFATable dfa = new DFATable();
+
+		/* Create Table Walker */
+		TableWalker tw = new TableWalker(dfa);
+		tw.scan(inputFile);
+
+		System.out.println("CHARACTER CLASSES");
+		for (String name : characterClassNfas.keySet()) {
 			System.out.println(name);
-			NFA nfa = nfas.get(name);
+			NFA nfa = characterClassNfas.get(name);
 			nfa.print();
 		}
-
+		System.out.println("-----------------------------------");
+		System.out.println("TOKENS");
+		for (String name : tokenNfas.keySet()) {
+			System.out.println(name);
+			NFA nfa = tokenNfas.get(name);
+			nfa.print();
+		}
 
 	}
 }
