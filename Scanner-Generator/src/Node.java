@@ -35,4 +35,8 @@ public class Node {
 	public void addSuccessor(Node node){
 		this.successors.add(node);
 	}
+	
+	public ArrayList<Node> getSuccessors(){
+		return this.successors;
+	}
 }

@@ -142,8 +142,9 @@ public class NFA {
 	}
 
 	public void print() {
-		for(Node n : this.startState.successors){
-			System.out.println(n.nextChar);
+		for(Node n : this.startState.getSuccessors())
+		{
+			System.out.println(n.transitionChars);
 		}
 	}
 	public ArrayList<Character> getAcceptedChars(){
@@ -152,6 +153,7 @@ public class NFA {
 	public static void main(String[] args) throws Exception {
 		
 		NFA nfa = new NFA("$CHAR", "[A-z]");
+
 		NFA nfa2 = new NFA("$Upper", "[^a-z]", nfa);
 		nfa2.print();
 	}
