@@ -20,6 +20,7 @@ public class Node implements Cloneable {
 	}
 	public Node(){
 		this.start = true;
+		this.accept = false;
 		successors = new ArrayList<Node>();
 	}
 	public Node(char next){

@@ -202,6 +202,16 @@ public class NFA {
 		for(Node n : nfa2.startState.getSuccessors()){
 			start.addSuccessor(n);
 		}
+		Node end = new Node();
+		end.accept = true;
+		Node node = new Node();
+		for(Node n : start.getSuccessors()){
+			node = n;
+			while(node.accept == false){
+				node = node.getSuccessors().get(0);
+			}
+			node = end;
+		}
 		return new NFA(start);
 	}
 	
@@ -211,11 +221,26 @@ public class NFA {
 		Node node = start;
 		node.addSuccessor(nfa1.startState.getSuccessors().get(0).clone());
 		node = node.getSuccessors().get(0);
+		while(node.accept != true){
+			node = node.getSuccessors().get(0);
+		}
 		node.accept = false;
 		node.addSuccessor(nfa2.startState.getSuccessors().get(0).clone());
 		
 		
 		return new NFA(start);
+	}
+	
+	public static NFA star(NFA nfa){
+		Node start = new Node();
+		start.addSuccessor(nfa.startState.getSuccessors().get(0).clone());
+		Node node = start;
+		while(node.accept != true){
+			node = node.getSuccessors().get(0);
+		}
+		node.addSuccessor(node);
+		
+		return new NFA(node);
 	}
 
 }
