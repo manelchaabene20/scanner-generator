@@ -1,12 +1,23 @@
 import java.util.ArrayList;
 
 
-public class Node {
+public class Node implements Cloneable {
+	
 	char nextChar;
 	ArrayList<Node> successors;
 	ArrayList<Character> transitionChars;
 	boolean accept;
 	boolean start;
+	
+	public Node clone(){
+		Node node = new Node();
+		node.nextChar = this.nextChar;
+		node.successors = (ArrayList<Node>)this.successors.clone();
+		node.transitionChars = (ArrayList<Character>)this.transitionChars.clone();
+		node.accept = this.accept;
+		node.start = this.start;
+		return node;
+	}
 	public Node(){
 		this.start = true;
 		successors = new ArrayList<Node>();

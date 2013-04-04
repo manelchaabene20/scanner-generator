@@ -8,6 +8,9 @@ public class NFA {
 	private ArrayList<Character> prev;
 	private Node startState;
 
+	public NFA(Node node){
+		this.startState = node;
+	}
 	public NFA(String name) throws Exception {
 		this.name = name;
 		this.starterNodes = new ArrayList<Node>();
@@ -171,14 +174,48 @@ public class NFA {
 		return this.acceptedChars;
 	}
 
+
 	public String getName() {
 		return name;
 	}
 
 	public static void main(String[] args) throws Exception {
+		
+		NFA nfa = new NFA("$CHAR", "[a-zA-Z]");
+		NFA nfa2 = new NFA("$DIGIT","[0-9]");
+		ArrayList<NFA> al = new ArrayList<NFA>();
+		al.add(nfa);
+		al.add(nfa2);
+		NFA nfa3 = concat(nfa,nfa2);
+		nfa3.print();
 
-		NFA nfa = new NFA("$CHAR", "=");
-		nfa.print();
+	
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static NFA union(NFA nfa1, NFA nfa2){
+		
+		Node start = new Node();
+		for(Node n : nfa1.startState.getSuccessors()){
+			start.addSuccessor(n);
+		}
+		for(Node n : nfa2.startState.getSuccessors()){
+			start.addSuccessor(n);
+		}
+		return new NFA(start);
+	}
+	
+	public static NFA concat(NFA nfa1, NFA nfa2){
+		
+		Node start = new Node();
+		Node node = start;
+		node.addSuccessor(nfa1.startState.getSuccessors().get(0).clone());
+		node = node.getSuccessors().get(0);
+		node.accept = false;
+		node.addSuccessor(nfa2.startState.getSuccessors().get(0).clone());
+		
+		
+		return new NFA(start);
 	}
 
 }
