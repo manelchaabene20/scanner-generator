@@ -134,6 +134,7 @@ public class NFA {
 				largerList.remove(ch);
 			}
 			Node node = new Node();
+			this.acceptedChars = largerList;
 			node.addSuccessor(new Node(largerList,true));
 			return node;
 		}
@@ -152,9 +153,9 @@ public class NFA {
 	}
 	public static void main(String[] args) throws Exception {
 		
-		NFA nfa = new NFA("$CHAR", "[A-z]");
+		NFA nfa = new NFA("$CHAR", "[a-zA-Z]");
 
-		NFA nfa2 = new NFA("$Upper", "[^a-z]", nfa);
+		NFA nfa2 = new NFA("$Lower", "[^A-Z]", nfa);
 		nfa2.print();
 	}
 
