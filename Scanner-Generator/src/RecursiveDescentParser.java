@@ -58,11 +58,11 @@ public class RecursiveDescentParser {
 					return union(s1, s2);
 				}
 				else{
-					if(nfas.containsKey(s)){
-						System.out.println("NFA "+s);
-						return nfas.get(s);
+					if(nfas.containsKey(group)){
+						System.out.println("NFA "+group);
+						return nfas.get(group);
 					}
-					else return new NFA(s,s);
+					else return new NFA(group, group);
 				}
 				
 			} 
