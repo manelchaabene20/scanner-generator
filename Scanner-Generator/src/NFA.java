@@ -164,9 +164,12 @@ public class NFA {
 	}
 
 	public void print() {
-
-		for (Node n : this.startState.getSuccessors()) {
-			System.out.println(n.transitionChars);
+		Node node = this.startState;
+		while(node.accept == false){
+			for (Node n : node.getSuccessors()) {
+				System.out.println(n.transitionChars);
+			}
+			node = node.getSuccessors().get(0);
 		}
 	}
 

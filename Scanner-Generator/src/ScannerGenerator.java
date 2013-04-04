@@ -69,7 +69,6 @@ public class ScannerGenerator {
 			nfa.print();
 		}
 
-		specReader.close();
 
 	}
 }
