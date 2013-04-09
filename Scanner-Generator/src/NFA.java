@@ -2,9 +2,7 @@ import java.util.ArrayList;
 
 public class NFA {
 	private String name;
-	private int[][] NFAtable;
 	private ArrayList<Character> acceptedChars;
-	private ArrayList<Node> starterNodes;
 	private ArrayList<Character> prev;
 	private Node startState;
 	private boolean isStar = false;
@@ -14,8 +12,6 @@ public class NFA {
 	}
 	public NFA(String name) throws Exception {
 		this.name = name;
-		this.starterNodes = new ArrayList<Node>();
-
 	}
 
 	public NFA(String name, String regex) throws Exception {
