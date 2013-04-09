@@ -222,6 +222,9 @@ public class NFA {
 		Node start = new Node();
 		start.start = true;
 		start.accept = false;
+		if(nfa1.isStar || nfa2.isStar){
+			start.accept = true;
+		}
 		start.addSuccessor(nfa1.startState);
 		start.addSuccessor(nfa2.startState);
 		Node end = new Node();
@@ -313,8 +316,8 @@ public class NFA {
 		NFA nfa2 = new NFA("$DIGIT", "[0-9]");
 		nfa = star(nfa);
 		nfa2 = star(nfa2);
-		NFA nfa3 = concat(nfa,nfa2);
-		System.out.println(accepted("sdfghjk123456",nfa3.startState));
+		NFA nfa3 = union(nfa,nfa2);
+		System.out.println(accepted("",nfa3.startState));
 		
 
 	
