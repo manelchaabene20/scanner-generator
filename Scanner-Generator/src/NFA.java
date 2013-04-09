@@ -7,6 +7,7 @@ public class NFA {
 	private ArrayList<Node> starterNodes;
 	private ArrayList<Character> prev;
 	private Node startState;
+	private boolean isStar = false;
 
 	public NFA(Node node){
 		this.startState = node;
@@ -83,6 +84,7 @@ public class NFA {
 			largerList.remove(ch);
 		}
 		Node node = new Node();
+		node.start = true;
 		node.addSuccessor(new Node(largerList, true));
 		return node;
 	}
@@ -158,6 +160,7 @@ public class NFA {
 
 		/* Build NFA table */
 		Node node = new Node();
+		node.start = true;
 		node.addSuccessor(new Node(acceptedChars, true));
 		return node;
 
@@ -182,64 +185,133 @@ public class NFA {
 		return name;
 	}
 
-	public static void main(String[] args) throws Exception {
-		
-		NFA nfa = new NFA("$CHAR", "[a-zA-Z]");
-		NFA nfa2 = new NFA("$DIGIT","[0-9]");
-		ArrayList<NFA> al = new ArrayList<NFA>();
-		al.add(nfa);
-		al.add(nfa2);
-		NFA nfa3 = concat(nfa,nfa2);
-		nfa3.print();
-
 	
+	
+	public static boolean accepted(String s,Node startNode){
+		boolean accepted = false;
+		if(s.length() == 0 && startNode.accept == true){
+			return true;
+		}
+		else if(s.length() == 0 && startNode.accept != true){
+			return false;
+		}
+		Character c = s.charAt(0);
+		
+		for(Node n : startNode.getSuccessors()){
+			if(n.start == true){
+				accepted =  accepted(s, n);
+				if(accepted){
+					return true;
+				}
+			}
+		else{
+			if(n.transitionChars.size() > 0){
+				if(n.transitionChars.contains(c))
+					accepted = accepted(s.substring(1), n);
+					if(accepted){
+						return true;
+					}
+				}
+			}
+		}
+
+		
+		
+		return accepted;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public static NFA union(NFA nfa1, NFA nfa2){
-		ArrayList<Character> arr = new ArrayList<Character>();
+		
 		Node start = new Node();
-		for(Node n : nfa1.startState.getSuccessors()){
-			for(Character c : n.transitionChars){
-				arr.add(c);
+		start.start = true;
+		start.accept = false;
+		start.addSuccessor(nfa1.startState);
+		start.addSuccessor(nfa2.startState);
+		Node end = new Node();
+		end.accept = true;
+		Node temp = nfa1.startState;
+		if(!nfa1.isStar){
+			while(temp.accept == false && temp.getSuccessors().size() > 0){
+				temp = temp.getSuccessors().get(0);
 			}
 		}
-		for(Node n : nfa2.startState.getSuccessors()){
-			for(Character c : n.transitionChars){
-				arr.add(c);
+		else{
+			while(temp.accept == false && temp.end != false){
+				temp = temp.getSuccessors().get(0);
 			}
 		}
-		Node end = new Node(arr,true);
-		start.addSuccessor(end);
+		temp.addSuccessor(end);
+		temp = nfa2.startState;
+		if(!nfa2.isStar){
+			while(temp.accept == false && temp.getSuccessors().size() > 0){
+				temp = temp.getSuccessors().get(0);
+			}
+		}
+		else{
+			while(temp.accept == false && temp.end != false){
+				temp = temp.getSuccessors().get(0);
+			}
+		}
+		temp.addSuccessor(end);
 		return new NFA(start);
 	}
 	
 	public static NFA concat(NFA nfa1, NFA nfa2){
 		
-		Node start = new Node();
-		Node node = start;
-		node.addSuccessor(nfa1.startState.getSuccessors().get(0).clone());
-		node = node.getSuccessors().get(0);
-		while(node.accept != true){
-			node = node.getSuccessors().get(0);
+		Node node = new Node();
+		if(nfa1.isStar){
+			nfa1.startState.accept = false;
+			nfa1.startState.addSuccessor(nfa2.startState);
+			node = nfa1.startState;
+			while(node.accept == false && node.end == false){
+				node = node.getSuccessors().get(0);
+			}
+			for(Node n : nfa2.startState.getSuccessors()){
+				node.addSuccessor(n);
+			}
+			
+		}
+		else{
+			node = nfa1.startState;
+			while(node.accept == false && node.getSuccessors().size() > 0){
+				node = node.getSuccessors().get(0);
+			}
+			for(Node n : nfa2.startState.getSuccessors()){
+				node.addSuccessor(n);
+			}
 		}
 		node.accept = false;
-		node.addSuccessor(nfa2.startState.getSuccessors().get(0).clone());
+		if(!nfa2.isStar){
+			nfa2.startState.start = false;
+		}
 		
 		
-		return new NFA(start);
+		return nfa1;
 	}
 	
 	public static NFA star(NFA nfa){
-		Node start = new Node();
-		start.addSuccessor(nfa.startState.getSuccessors().get(0).clone());
-		Node node = start;
-		while(node.accept != true){
-			node = node.getSuccessors().get(0);
-		}
-		node.addSuccessor(node);
 		
-		return new NFA(node);
+		Node temp = nfa.startState;
+		while(temp.accept == false && temp.getSuccessors().size() > 0){
+			temp = temp.getSuccessors().get(0);
+		}
+		temp.addSuccessor(nfa.startState);
+		temp.end = true;
+		nfa.isStar = true;
+		nfa.startState.accept = true;
+		return nfa;
 	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		NFA nfa = new NFA("$CHAR", "[a-zA-Z]");
+		NFA nfa2 = new NFA("$DIGIT", "[0-9]");
+		nfa = star(nfa);
+		NFA nfa3 = concat(nfa2,nfa);
+		System.out.println(accepted("1sssss",nfa3.startState));
+		
 
+	
+	}
 }

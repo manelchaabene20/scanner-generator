@@ -5,9 +5,10 @@ public class Node implements Cloneable {
 	
 	char nextChar;
 	ArrayList<Node> successors;
-	ArrayList<Character> transitionChars;
+	ArrayList<Character> transitionChars = new ArrayList<Character>();
 	boolean accept;
 	boolean start;
+	boolean end = false;
 	
 	public Node clone(){
 		Node node = new Node();
@@ -19,7 +20,7 @@ public class Node implements Cloneable {
 		return node;
 	}
 	public Node(){
-		this.start = true;
+		this.start = false;
 		this.accept = false;
 		successors = new ArrayList<Node>();
 	}
