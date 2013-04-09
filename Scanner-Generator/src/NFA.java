@@ -266,7 +266,6 @@ public class NFA {
 			for(Node n : nfa2.startState.getSuccessors()){
 				node.addSuccessor(n);
 				nfa1.startState.addSuccessor(n);
-				
 			}
 		}
 		else{
@@ -274,15 +273,23 @@ public class NFA {
 			while(node.accept == false && node.getSuccessors().size() > 0){
 				node = node.getSuccessors().get(0);
 			}
+			
 			for(Node n : nfa2.startState.getSuccessors()){
 				node.addSuccessor(n);
+				
 			}
 		}
 		node.accept = false;
 		if(!nfa2.isStar){
 			nfa2.startState.start = false;
 		}
-		
+		else{
+			node.accept = true;
+		}
+		if(nfa1.isStar && nfa2.isStar){
+			nfa1.startState.accept = true;
+			
+		}
 		
 		return nfa1;
 	}
@@ -306,8 +313,8 @@ public class NFA {
 		NFA nfa2 = new NFA("$DIGIT", "[0-9]");
 		nfa = star(nfa);
 		nfa2 = star(nfa2);
-		NFA nfa3 = concat(nfa2,nfa);
-		System.out.println(accepted("sssss",nfa3.startState));
+		NFA nfa3 = concat(nfa,nfa2);
+		System.out.println(accepted("sdfghjk123456",nfa3.startState));
 		
 
 	
