@@ -265,8 +265,9 @@ public class NFA {
 			}
 			for(Node n : nfa2.startState.getSuccessors()){
 				node.addSuccessor(n);
+				nfa1.startState.addSuccessor(n);
+				
 			}
-			
 		}
 		else{
 			node = nfa1.startState;
@@ -304,8 +305,9 @@ public class NFA {
 		NFA nfa = new NFA("$CHAR", "[a-zA-Z]");
 		NFA nfa2 = new NFA("$DIGIT", "[0-9]");
 		nfa = star(nfa);
+		nfa2 = star(nfa2);
 		NFA nfa3 = concat(nfa2,nfa);
-		System.out.println(accepted("1sssss",nfa3.startState));
+		System.out.println(accepted("sssss",nfa3.startState));
 		
 
 	
