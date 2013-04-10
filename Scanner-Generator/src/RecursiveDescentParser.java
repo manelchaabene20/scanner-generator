@@ -60,7 +60,10 @@ public class RecursiveDescentParser {
 				else{
 					if(nfas.containsKey(group)){
 						System.out.println("NFA "+group);
-						return nfas.get(group);
+						
+						return NFA.clone(nfas.get(group));
+						
+						
 					}
 					else return new NFA(group, group);
 				}
@@ -70,12 +73,12 @@ public class RecursiveDescentParser {
 		else{
 			if(nfas.containsKey(s)){
 				System.out.println("NFA "+s);
-				return nfas.get(s);
+				return NFA.clone(nfas.get(s));
 			}
 			else return new NFA(s,s);
 		}
 	}
-
+	
 	public NFA concat(String s1, String s2) throws Exception {
 		return NFA.concat(next(s1), next(s2));
 	}

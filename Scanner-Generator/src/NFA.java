@@ -83,6 +83,7 @@ public class NFA {
 		}
 		Node node = new Node();
 		node.start = true;
+		this.acceptedChars = largerList;
 		node.addSuccessor(new Node(largerList, true));
 		return node;
 	}
@@ -312,6 +313,14 @@ public class NFA {
 		return nfa;
 	}
 	
+
+	public static NFA clone(NFA old){
+		Node startState = new Node();
+		startState.start = true;
+		startState.addSuccessor(new Node(old.getAcceptedChars(), true));
+		return new NFA(startState);
+	}
+	
 	public static void main(String[] args) throws Exception {
 		
 		NFA nfa = new NFA("$CHAR", "[a-zA-Z]");
@@ -320,8 +329,5 @@ public class NFA {
 		nfa2 = star(nfa2);
 		NFA nfa3 = union(nfa,nfa2);
 		System.out.println(accepted("",nfa3.startState));
-		
-
-	
 	}
 }
