@@ -28,7 +28,9 @@ public class NFA {
 		this.startState = parseIN(regex);
 
 	}
-
+	
+	
+	
 	public Node parseIN(String regex) throws Exception {
 		int state = 0;
 		int index = 0;
