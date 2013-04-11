@@ -43,9 +43,9 @@ public class TableWalker {
 					}
 				}
 				if (accepted == false) {
+					throw new Exception(s + "");
 					// And put this println into a file
-					System.out.println("NOT ACCEPTED " + s);
-					output += "NOT ACCEPTED " + s + "\n";
+					
 
 				}
 			}

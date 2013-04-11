@@ -330,14 +330,8 @@ public class NFA {
 	
 	public static void main(String[] args) throws Exception {
 		
-		NFA nfa = new NFA("$DIGIT", "[0-9]");
-		NFA nfa2 = new NFA("$DIGIT", "[0-9]");
-		NFA nfa3 = new NFA("period", ".");
-		nfa = star(nfa);
-		nfa2 = star(nfa2);
-		NFA nfa4 = concat(nfa,nfa3);
-		NFA nfa5 = concat(nfa4,nfa2);
-		
-		System.out.println(accepted("12.12",nfa5.startState));
+		NFA nfa = new NFA("$DIGIT", "[\\ ]");
+
+		System.out.println(accepted("",nfa.startState));
 	}
 }
