@@ -28,6 +28,7 @@ public class Node implements Cloneable {
 		this.start = false;
 		transitionChars = new ArrayList<Character>();
 		successors = new ArrayList<Node>();
+		transitionChars.add(next);
 	}
 	public Node(char next, boolean accept){
 		this.start = false;

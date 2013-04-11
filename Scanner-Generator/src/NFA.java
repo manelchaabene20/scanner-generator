@@ -24,7 +24,23 @@ public class NFA {
 		this.acceptState = startState.getSuccessors().get(0);
 
 	}
-
+	public NFA(String name, String accepted, boolean something) throws Exception{
+		this.name = name;
+		ArrayList<Character> str = new ArrayList<Character>();
+		for(int i = 0; i < accepted.length(); i++){
+			str.add(accepted.charAt(i));
+		}
+		Node start = new Node();
+		this.startState = start;
+		Node temp = start;
+		for(Character c : str){
+			temp.addSuccessor(new Node(c));
+			temp = temp.getSuccessors().get(0);
+		}
+		temp.accept = true;
+		this.acceptState = temp;
+		
+	}
 	public NFA(String name, String regex, NFA prev) throws Exception {
 		this.acceptedChars = new ArrayList<Character>();
 		this.name = name;
