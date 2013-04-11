@@ -6,6 +6,7 @@ public class NFA {
 	private ArrayList<Character> acceptedChars;
 	private ArrayList<Character> prev;
 	private Node startState;
+	private Node acceptState = null;
 	private boolean isStar = false;
 
 	public NFA(Node node){
@@ -19,6 +20,7 @@ public class NFA {
 		this.name = name;
 		acceptedChars = new ArrayList<Character>();
 		this.startState = parse(regex);
+		this.acceptState = startState.getSuccessors().get(0);
 
 	}
 
@@ -27,11 +29,17 @@ public class NFA {
 		this.name = name;
 		this.prev = (ArrayList<Character>) prev.getAcceptedChars().clone();
 		this.startState = parseIN(regex);
+		this.acceptState = startState.getSuccessors().get(0);
 
 	}
 	
 	
 	
+	/**
+	 * @param regex
+	 * @return
+	 * @throws Exception
+	 */
 	public Node parseIN(String regex) throws Exception {
 		int state = 0;
 		int index = 0;
@@ -88,7 +96,14 @@ public class NFA {
 		node.addSuccessor(new Node(largerList, true));
 		return node;
 	}
-
+	
+	/**
+	 * Reads in a string for the regex associated with a character class. Custom
+	 * parse method reads in the regex to build out a list of accepted characters.
+	 * @param regex
+	 * @return
+	 * @throws Exception
+	 */
 	public Node parse(String regex) throws Exception {
 
 		/* Parsing genius code */
@@ -222,7 +237,6 @@ public class NFA {
 	
 	@SuppressWarnings("unchecked")
 	public static NFA union(NFA nfa1, NFA nfa2){
-		
 		Node start = new Node();
 		start.start = true;
 		start.accept = false;
@@ -231,84 +245,36 @@ public class NFA {
 		}
 		start.addSuccessor(nfa1.startState);
 		start.addSuccessor(nfa2.startState);
-		Node end = new Node();
-		end.accept = true;
-		Node temp = nfa1.startState;
-		if(!nfa1.isStar){
-			while(temp.accept == false && temp.getSuccessors().size() > 0){
-				temp = temp.getSuccessors().get(0);
-			}
-		}
-		else{
-			while(temp.accept == false && temp.end != false){
-				temp = temp.getSuccessors().get(0);
-			}
-		}
-		temp.addSuccessor(end);
-		temp = nfa2.startState;
-		if(!nfa2.isStar){
-			while(temp.accept == false && temp.getSuccessors().size() > 0){
-				temp = temp.getSuccessors().get(0);
-			}
-		}
-		else{
-			while(temp.accept == false && temp.end != false){
-				temp = temp.getSuccessors().get(0);
-			}
-		}
-		temp.addSuccessor(end);
-		return new NFA(start);
+		nfa1.acceptState = nfa2.acceptState;
+		NFA out = new NFA(start);
+		out.acceptState = nfa2.acceptState;
+		return out;
 	}
 	
 	public static NFA concat(NFA nfa1, NFA nfa2){
-		
-		Node node = new Node();
-		if(nfa1.isStar){
-			nfa1.startState.accept = false;
-			nfa1.startState.addSuccessor(nfa2.startState);
-			node = nfa1.startState;
-			while(node.accept == false && node.end == false){
-				node = node.getSuccessors().get(0);
-			}
-			for(Node n : nfa2.startState.getSuccessors()){
-				node.addSuccessor(n);
-				nfa1.startState.addSuccessor(n);
-			}
+		nfa1.startState.accept = false;
+		nfa1.acceptState.accept = false;
+		nfa1.acceptState.addSuccessor(nfa2.startState);
+		if(nfa2.isStar){
+			nfa1.acceptState.accept = true;
 		}
 		else{
-			node = nfa1.startState;
-			while(node.accept == false && node.getSuccessors().size() > 0){
-				node = node.getSuccessors().get(0);
-			}
-			
-			for(Node n : nfa2.startState.getSuccessors()){
-				node.addSuccessor(n);
-				
-			}
-		}
-		node.accept = false;
-		if(!nfa2.isStar){
-			nfa2.startState.start = false;
-		}
-		else{
-			node.accept = true;
-		}
+			nfa1.acceptState.accept = false;
+		}	
 		if(nfa1.isStar && nfa2.isStar){
 			nfa1.startState.accept = true;
-			
 		}
-		
+		nfa1.isStar = false;
+		nfa1.acceptState = nfa2.acceptState;
+		nfa1.isStar = false;
 		return nfa1;
 	}
 	
 	public static NFA star(NFA nfa){
+		nfa.acceptState.addSuccessor(nfa.startState);
 		
-		Node temp = nfa.startState;
-		while(temp.accept == false && temp.getSuccessors().size() > 0){
-			temp = temp.getSuccessors().get(0);
-		}
-		temp.addSuccessor(nfa.startState);
-		temp.end = true;
+
+		nfa.acceptState.end = true;
 		nfa.isStar = true;
 		nfa.startState.accept = true;
 		return nfa;
@@ -335,11 +301,14 @@ public class NFA {
 	
 	public static void main(String[] args) throws Exception {
 		
-		NFA nfa = new NFA("$CHAR", "[a-zA-Z]");
+		NFA nfa = new NFA("$DIGIT", "[0-9]");
 		NFA nfa2 = new NFA("$DIGIT", "[0-9]");
+		NFA nfa3 = new NFA("period", ".");
 		nfa = star(nfa);
 		nfa2 = star(nfa2);
-		NFA nfa3 = concat(nfa,nfa2);
-		System.out.println(accepted("sdfasf4214211",nfa3.startState));
+		NFA nfa4 = concat(nfa,nfa3);
+		NFA nfa5 = concat(nfa4,nfa2);
+		
+		System.out.println(accepted("12.12",nfa5.startState));
 	}
 }
