@@ -26,21 +26,21 @@ public class RecursiveDescentParser {
 			/* Concatenation operator */
 			String s1 = s.substring(0, space);
 			String s2 = s.substring(space + 1);
-			System.out.println("CONCAT");
-			System.out.println(s1);
-			System.out.println(s2);
+			//System.out.println("CONCAT");
+			//System.out.println(s1);
+			//System.out.println(s2);
 			return concat(s1, s2);
 			
 		} else if (left_paren != -1 && right_paren != -1) {
 			String group = s.substring(left_paren + 1, right_paren);
 
-			System.out.println("GROUP "+group);
+			//System.out.println("GROUP "+group);
 			
 			String after_group = "";
 			if(right_paren+1 < s.length()){
 				after_group = s.substring(right_paren + 1, right_paren + 2);
 			}
-			System.out.println(after_group);
+			//System.out.println(after_group);
 			if (after_group.equals("*")) {
 				//System.out.println("STAR");
 				return star("("+group+")");
@@ -59,7 +59,7 @@ public class RecursiveDescentParser {
 				}
 				else{
 					if(nfas.containsKey(group)){
-						System.out.println("NFA "+group);
+						//System.out.println("NFA "+group);
 						
 						return NFA.clone(nfas.get(group));
 						

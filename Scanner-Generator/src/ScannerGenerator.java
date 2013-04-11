@@ -67,7 +67,6 @@ public class ScannerGenerator {
 		/* Combine all NFA's */
 		NFA combined = NFA.union(tokenNfas);
 		
-		System.out.println("COMBINEEEEDD");
 		//combined.print();
 
 		/* Create Table Walker */
