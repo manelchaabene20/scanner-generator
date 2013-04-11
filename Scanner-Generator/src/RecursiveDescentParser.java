@@ -65,7 +65,7 @@ public class RecursiveDescentParser {
 						
 						
 					}
-					else return new NFA(group, group);
+					else return new NFA(group, group, true);
 				}
 				
 			} 
@@ -75,7 +75,7 @@ public class RecursiveDescentParser {
 				//System.out.println("NFA "+s);
 				return NFA.clone(nfas.get(s));
 			}
-			else return new NFA(s,s);
+			else return new NFA(s,s, true);
 		}
 	}
 	
