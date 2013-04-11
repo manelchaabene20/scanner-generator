@@ -57,7 +57,7 @@ public class ScannerGenerator {
 				String var = currLine.substring(0, currLine.indexOf(" "));
 				String regex = currLine.substring(currLine.indexOf(" ") + 1);
 				
-				System.out.println(currLine);
+				//System.out.println(currLine);
 				RecursiveDescentParser parser = new RecursiveDescentParser(characterClassNfas);
 				tokenNfas.put(var, parser.next(regex));
 			}
@@ -65,27 +65,28 @@ public class ScannerGenerator {
 		
 
 		/* Combine all NFA's */
+		NFA combined = NFA.union(tokenNfas);
 		
-
-		/* Convert NFA's to DFATable */
-		DFATable dfa = new DFATable();
+		System.out.println("COMBINEEEEDD");
+		//combined.print();
 
 		/* Create Table Walker */
-		TableWalker tw = new TableWalker(dfa);
+		TableWalker tw = new TableWalker(tokenNfas);
 		tw.scan(inputFile);
+		
 
-		System.out.println("CHARACTER CLASSES");
+		//System.out.println("CHARACTER CLASSES");
 		for (String name : characterClassNfas.keySet()) {
-			System.out.println(name);
+			//System.out.println(name);
 			NFA nfa = characterClassNfas.get(name);
-			nfa.print();
+			//nfa.print();
 		}
-		System.out.println("-----------------------------------");
-		System.out.println("TOKENS");
+		//System.out.println("-----------------------------------");
+		//System.out.println("TOKENS");
 		for (String name : tokenNfas.keySet()) {
-			System.out.println(name);
+			//System.out.println(name);
 			NFA nfa = tokenNfas.get(name);
-			nfa.print();
+			//nfa.print();
 		}
 
 	}

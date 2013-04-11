@@ -30,7 +30,9 @@ public class NFA {
 
 	}
 	
-	
+	public Node getStartState(){
+		return this.startState;
+	}
 	
 	public Node parseIN(String regex) throws Exception {
 		int state = 0;
@@ -322,7 +324,7 @@ public class NFA {
 		return new NFA(startState);
 	}
 	
-	public NFA union(HashMap<String,NFA> nfas){
+	public static NFA union(HashMap<String,NFA> nfas){
 		Node start = new Node();
 		start.start = true;
 		for(NFA n : nfas.values()){
