@@ -143,63 +143,69 @@ public class NFA {
 		c = regex.charAt(index);
 
 		/* Figure out accepted characters in a [] character class */
-
-		if (c == '[') {
-			c = regex.charAt(++index);
-			boolean accepted = true;
-			if (c == '^') {
-				accepted = false;
+		if(c == '.'){
+			for(int i = 0; i < 256; i++){
+				acceptedChars.add((char)i);
 			}
-			while (c != ']') {
-				if (c == '-') {
-					char start = acceptedChars.get(acceptedChars.size() - 1);
-					char end = regex.charAt(index + 1);
-
-					if (start > end) {
-						throw new Exception("Range is invalid.");
-					}
-
-					for (int i = (int) start + 1; i < (int) end; i++) {
-						acceptedChars.add((char) i);
-					}
-				} else if (c == '\\') { // NOTE: have to escape the \ char in
-										// Java
-					c = regex.charAt(++index);
-					acceptedChars.add(c);
-				} else { // All other characters
-					acceptedChars.add(c);
-				}
-				if (c != ']')
-					c = regex.charAt(++index);
-			}
-			if (accepted == false) { // We have a ^
-				ArrayList<Character> actualAcceptedChars = new ArrayList<Character>();
-				for (int i = 0; i < 256; i++) { // Loop through all possible
-												// chars
-					if (!acceptedChars.contains((char) i)) {
-						actualAcceptedChars.add((char) i);
-					}
-				}
-				acceptedChars = actualAcceptedChars;
-			}
-			index++; // Increment past ']'
 		}
 		else{
-			
-			while(index < regex.length()){
-				c = regex.charAt(index);
-				if(c == '\\'){
-					index++;
+			if (c == '[') {
+				c = regex.charAt(++index);
+				boolean accepted = true;
+				if (c == '^') {
+					accepted = false;
 				}
-				else{
-					acceptedChars.add(c);
-					index++;
+				while (c != ']') {
+					if (c == '-') {
+						char start = acceptedChars.get(acceptedChars.size() - 1);
+						char end = regex.charAt(index + 1);
+	
+						if (start > end) {
+							throw new Exception("Range is invalid.");
+						}
+	
+						for (int i = (int) start + 1; i < (int) end; i++) {
+							acceptedChars.add((char) i);
+						}
+					} else if (c == '\\') { // NOTE: have to escape the \ char in
+											// Java
+						c = regex.charAt(++index);
+						acceptedChars.add(c);
+					} else { // All other characters
+						acceptedChars.add(c);
+					}
+					if (c != ']')
+						c = regex.charAt(++index);
 				}
+				if (accepted == false) { // We have a ^
+					ArrayList<Character> actualAcceptedChars = new ArrayList<Character>();
+					for (int i = 0; i < 256; i++) { // Loop through all possible
+													// chars
+						if (!acceptedChars.contains((char) i)) {
+							actualAcceptedChars.add((char) i);
+						}
+					}
+					acceptedChars = actualAcceptedChars;
+				}
+				index++; // Increment past ']'
+			}
+			else{
 				
-				
+				while(index < regex.length()){
+					c = regex.charAt(index);
+					if(c == '\\'){
+						index++;
+					}
+					else{
+						acceptedChars.add(c);
+						index++;
+					}
+					
+					
+					
+				}
 				
 			}
-			
 		}
 
 		/* Build NFA table */
@@ -325,8 +331,8 @@ public class NFA {
 	
 	public static void main(String[] args) throws Exception {
 		
-		NFA nfa = new NFA("$DIGIT", "[\\ ]");
+		NFA nfa = new NFA("$DIGIT", ".");
 
-		System.out.println(accepted(" ",nfa.startState));
+		System.out.println(accepted("s",nfa.startState));
 	}
 }
