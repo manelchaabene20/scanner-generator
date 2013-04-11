@@ -28,13 +28,16 @@ public class TableWalker {
 			for(String s: tokens){
 				//System.out.println(s);
 				boolean accepted = false;
-				for(NFA nfa: nfas.values()){
+				for(String name: nfas.keySet()){
+					NFA nfa = nfas.get(name);
 					if (NFA.accepted(s, nfa.getStartState())){
-						System.out.println("ACCEPTED "+s);
+						// Put this println into a file
+						System.out.println(name.substring(1)+" "+s);
 						accepted = true;
 					}
 				}
 				if (accepted == false){
+					// And put this println into a file
 					System.out.println("NOT ACCEPTED "+s);
 				}
 			}
