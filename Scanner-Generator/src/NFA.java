@@ -229,8 +229,7 @@ public class NFA {
 		return name;
 	}
 
-	
-	
+
 	public static boolean accepted(String s,Node startNode){
 		boolean accepted = false;
 		if(s.length() == 0 && startNode.accept == true){
@@ -240,7 +239,6 @@ public class NFA {
 			return false;
 		}
 		Character c = s.charAt(0);
-		
 		for(Node n : startNode.getSuccessors()){
 			if(n.start == true){
 				accepted =  accepted(s, n);
@@ -258,9 +256,6 @@ public class NFA {
 				}
 			}
 		}
-
-		
-		
 		return accepted;
 	}
 	
@@ -332,6 +327,6 @@ public class NFA {
 		
 		NFA nfa = new NFA("$DIGIT", "[\\ ]");
 
-		System.out.println(accepted("",nfa.startState));
+		System.out.println(accepted(" ",nfa.startState));
 	}
 }

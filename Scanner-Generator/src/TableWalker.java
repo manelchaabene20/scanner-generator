@@ -32,21 +32,40 @@ public class TableWalker {
 			for (String s : tokens) {
 				// System.out.println(s);
 				boolean accepted = false;
-				for (String name : nfas.keySet()) {
-					NFA nfa = nfas.get(name);
-					if (NFA.accepted(s, nfa.getStartState())) {
-						// Put this println into a file
-						System.out.println(name.substring(1) + " " + s);
-						output += name.substring(1) + " " + s + "\n";
-
-						accepted = true;
+				String temp = s;
+				int length = s.length();
+				int index = temp.length() - 1;
+				while(s.length() > 0 || !accepted){
+					while(accepted == false || temp.length() > 0){
+						for (String name : nfas.keySet()) {
+							NFA nfa = nfas.get(name);
+							if (NFA.accepted(temp, nfa.getStartState())) {
+								// Put this println into a file
+								System.out.println(name.substring(1) + " " + temp);
+								output += name.substring(1) + " " + temp + "\n";
+	
+								accepted = true;
+								
+							}
+						}
+						if(!accepted){
+							index--;	
+							temp = s.substring(0, index);
+						}
+						else{
+							break;
+						}
 					}
-				}
-				if (accepted == false) {
-					throw new Exception(s + "");
-					// And put this println into a file
+					if(accepted = true && !s.equals(temp)){
+						s = s.substring(temp.length());
+						index = s.length();
+						temp = s;
+						accepted = false;
+					}
+					else
+						break;
 					
-
+					
 				}
 			}
 
