@@ -12,6 +12,7 @@ public class NFA {
 	public NFA(Node node){
 		this.startState = node;
 	}
+	
 	public NFA(String name) throws Exception {
 		this.name = name;
 	}
@@ -274,8 +275,6 @@ public class NFA {
 	
 	public static NFA star(NFA nfa){
 		nfa.acceptState.addSuccessor(nfa.startState);
-		
-
 		nfa.acceptState.end = true;
 		nfa.isStar = true;
 		nfa.startState.accept = true;
@@ -287,7 +286,9 @@ public class NFA {
 		Node startState = new Node();
 		startState.start = true;
 		startState.addSuccessor(new Node(old.getAcceptedChars(), true));
-		return new NFA(startState);
+		NFA out = new NFA(startState);
+		out.acceptState = startState.getSuccessors().get(0);
+		return out;
 	}
 	
 	public static NFA union(HashMap<String,NFA> nfas){
