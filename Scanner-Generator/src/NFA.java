@@ -27,16 +27,26 @@ public class NFA {
 	public NFA(String name, String accepted, boolean something) throws Exception{
 		this.name = name;
 		ArrayList<Character> str = new ArrayList<Character>();
-		for(int i = 0; i < accepted.length(); i++){
-			str.add(accepted.charAt(i));
+		int index = 0;
+		Character c = accepted.charAt(index);
+		while(index < accepted.length()){
+			c = accepted.charAt(index);
+			if(c == '\\'){
+				index++;
+			}
+			else{
+				str.add(c);
+				index++;
+			}
 		}
 		Node start = new Node();
 		this.startState = start;
 		Node temp = start;
-		for(Character c : str){
-			temp.addSuccessor(new Node(c));
+		for(Character ch : str){
+			temp.addSuccessor(new Node(ch));
 			temp = temp.getSuccessors().get(0);
 		}
+		startState.start = true;
 		temp.accept = true;
 		this.acceptState = temp;
 		
