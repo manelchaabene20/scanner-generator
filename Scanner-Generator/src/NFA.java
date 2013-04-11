@@ -331,8 +331,8 @@ public class NFA {
 	
 	public static void main(String[] args) throws Exception {
 		
-		NFA nfa = new NFA("$DIGIT", ".");
+		NFA nfa = new NFA("$DIGIT", "[abv]");
 
-		System.out.println(accepted("s",nfa.startState));
+		System.out.println(accepted("b",nfa.startState));
 	}
 }
