@@ -50,6 +50,11 @@ public class TableWalker {
 						}
 						if(!accepted){
 							index--;	
+							
+							if(index == -1){
+								throw new Exception("Error in input! Invalid character sequence!");
+							}
+							
 							temp = s.substring(0, index);
 						}
 						else{

@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashMap;
 
@@ -12,9 +13,15 @@ public class ScannerGenerator {
 
 	public static void main(String[] args) throws Exception {
 
-		String specFile = "SampleSpec.txt";
-		String inputFile = "SampleInput.txt";
+		String specFile = "test/SampleSpec.txt";
+		String inputFile = "test/SampleInput.txt";
+		
+		run(specFile, inputFile);
 
+	}
+	
+	public static void run(String specFile, String inputFile) throws Exception{
+		
 		BufferedReader specReader = new BufferedReader(new FileReader(specFile));
 
 		String currLine;
@@ -87,6 +94,5 @@ public class ScannerGenerator {
 			NFA nfa = tokenNfas.get(name);
 			//nfa.print();
 		}
-
 	}
 }
