@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NFA {
 	private String name;
@@ -321,13 +322,24 @@ public class NFA {
 		return new NFA(startState);
 	}
 	
+	public NFA union(HashMap<String,NFA> nfas){
+		Node start = new Node();
+		start.start = true;
+		for(NFA n : nfas.values()){
+			start.addSuccessor(n.startState);
+		}
+		
+		return new NFA(start);
+		
+	}
+	
 	public static void main(String[] args) throws Exception {
 		
 		NFA nfa = new NFA("$CHAR", "[a-zA-Z]");
 		NFA nfa2 = new NFA("$DIGIT", "[0-9]");
 		nfa = star(nfa);
 		nfa2 = star(nfa2);
-		NFA nfa3 = union(nfa,nfa2);
-		System.out.println(accepted("",nfa3.startState));
+		NFA nfa3 = concat(nfa,nfa2);
+		System.out.println(accepted("sdfasf4214211",nfa3.startState));
 	}
 }
