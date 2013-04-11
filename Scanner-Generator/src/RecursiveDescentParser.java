@@ -18,9 +18,12 @@ public class RecursiveDescentParser {
 	 * @throws Exception
 	 */
 	public NFA next(String s) throws Exception {
+		System.out.println(s);
 		int space = s.indexOf(" ");
 		int left_paren = s.indexOf("(");
 		int right_paren = s.indexOf(")");
+		int star = s.indexOf("*");
+		int plus = s.indexOf("+");
 		if (space != -1) {
 			
 			/* Concatenation operator */
@@ -66,15 +69,41 @@ public class RecursiveDescentParser {
 						
 					}
 					else return new NFA(group, group, true);
-				}
-				
-			} 
+				}	
+			}
+		}
+		else if(star != -1 && s.substring(star-1,star).matches("\\\\*")==false){
+			System.out.println("STAR "+s);
+			if(star != s.length()-1){
+				throw new Exception("Inproper input! Star in middle of string!");
+			}
+			String toStar = s.substring(star-1,star);
+			if(star==1){
+				return star(toStar);
+			}
+			else{
+				return concat(s.substring(0,star-1),toStar+"*");
+			}
+		}
+		else if(plus != -1 && s.substring(plus-1,plus).matches("\\\\*")==false){
+			System.out.println("PLUS "+s);
+			if(plus != s.length()-1){
+				throw new Exception("Inproper input! Star in middle of string!");
+			}
+			String toPlus = s.substring(plus-1,plus);
+			if(plus==1){
+				return concat(toPlus,toPlus+"*");
+			}
+			else{
+				return concat(s.substring(0,plus-1)+toPlus,toPlus+"*");
+			}
 		}
 		else{
 			if(nfas.containsKey(s)){
 				//System.out.println("NFA "+s);
 				return NFA.clone(nfas.get(s));
 			}
+			
 			else return new NFA(s,s, true);
 		}
 	}
