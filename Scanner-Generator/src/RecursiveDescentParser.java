@@ -18,26 +18,26 @@ public class RecursiveDescentParser {
 	 * @throws Exception
 	 */
 	public NFA next(String s) throws Exception {
-		System.out.println(s);
+		//System.out.println(s);
 		int space = s.indexOf(" ");
 		int left_paren = s.indexOf("(");
 		int right_paren = s.indexOf(")");
 		int star = s.indexOf("*");
 		int plus = s.indexOf("+");
-		if (space != -1 && space < left_paren) {
+		if ((space != -1 && left_paren == -1) || (space != -1 && (space < left_paren || space > right_paren) )) {
 			
 			/* Concatenation operator */
 			String s1 = s.substring(0, space);
 			String s2 = s.substring(space + 1);
-			//System.out.println("CONCAT");
-			//System.out.println(s1);
-			//System.out.println(s2);
+			System.out.println("CONCAT");
+			System.out.println(s1);
+			System.out.println(s2);
 			return concat(s1, s2);
 			
 		} else if (left_paren != -1 && right_paren != -1) {
 			String group = s.substring(left_paren + 1, right_paren);
 
-			//System.out.println("GROUP "+group);
+			System.out.println("GROUP "+group);
 			
 			String after_group = "";
 			if(right_paren+1 < s.length()){
@@ -45,7 +45,7 @@ public class RecursiveDescentParser {
 			}
 			//System.out.println(after_group);
 			if (after_group.equals("*")) {
-				//System.out.println("STAR");
+				System.out.println("STAR");
 				return star("("+group+")");
 			} else if (after_group.equals("+")) {
 				//System.out.println("PLUS");

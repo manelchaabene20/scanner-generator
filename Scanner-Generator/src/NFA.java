@@ -358,16 +358,11 @@ public class NFA {
 	
 	public static void main(String[] args) throws Exception {
 		
-		NFA nfa = new NFA("$DIGIT", "[0-9]");
-		NFA nfa3 = new NFA("","\\.");
-		NFA nfa2 = new NFA("$LOWER","[0-9]");
-		nfa = star(nfa);
-		nfa2 = star(nfa2);
+		NFA nfa = new NFA("$B", "B");
+		NFA nfa2 = new NFA("$C", "C");
+		nfa2 = concat(nfa,nfa2);
 		
 
-		NFA nfa5 = concat(nfa,nfa3);
-		nfa5 = concat(nfa5,nfa2);
-	
-		System.out.println(accepted("1",nfa5.startState));
+		System.out.println(accepted("BC",nfa2.startState));
 	}
 }

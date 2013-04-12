@@ -31,7 +31,7 @@ public class ScannerGeneratorTest {
 	}
 	
 	
-	@Test
+	@Test (timeout = 100)
 	public void testCharClass() throws Exception {
 
 		String specFile = "test/Spec1.txt";
@@ -88,7 +88,7 @@ public class ScannerGeneratorTest {
 		}
 	}
 
-	@Test
+	@Test (timeout = 5)
 	public void testEmptyStringAndConcatInParen() throws Exception {
 
 		String specFile = "test/Spec3.txt";

@@ -52,7 +52,7 @@ public class TableWalker {
 							index--;	
 							
 							if(index == -1){
-								throw new Exception("Error in input! Invalid character sequence!");
+								throw new Exception("Error in input! Invalid character sequence! "+s);
 							}
 							
 							temp = s.substring(0, index);

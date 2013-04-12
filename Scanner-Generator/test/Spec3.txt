@@ -2,5 +2,5 @@ $A A
 $B B
 $C C
 
-$IDENTIFIER $A (|$B)*
-$INT ($B $C)+
+$IDENTIFIER $A ($B)*
+$INT ($B $C)
