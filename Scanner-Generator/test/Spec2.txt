@@ -1,4 +1,4 @@
-$DIGIT [0-378]
+$DIGIT [9-4]
 $NON-ZERO [^0] IN $DIGIT
 $CHAR [abcABC]
 $UPPER [^abc] IN $CHAR

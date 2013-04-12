@@ -85,7 +85,7 @@ public class NFA {
 				if (c == '-') {
 					char start = acceptedChars.get(acceptedChars.size() - 1);
 					char end = regex.charAt(index + 1);
-
+					
 					if (start > end) {
 						throw new Exception("Range is invalid.");
 					}
@@ -100,8 +100,9 @@ public class NFA {
 				} else { // All other characters
 					acceptedChars.add(c);
 				}
-				if (c != ']' || (c == ']' && regex.charAt(index-1) == '\\'))
+				if (c != ']' || (c == ']' && regex.charAt(index-1) == '\\')){
 					c = regex.charAt(++index);
+				}
 			}
 			if (accepted == false) { // We have a ^
 				ArrayList<Character> actualAcceptedChars = new ArrayList<Character>();
@@ -174,8 +175,9 @@ public class NFA {
 					} else { // All other characters
 						acceptedChars.add(c);
 					}
-					if (c != ']' || (c == ']' && regex.charAt(index-1) == '\\'))
+					if (c != ']' || (c == ']' && regex.charAt(index-1) == '\\')){
 						c = regex.charAt(++index);
+					}
 				}
 				if (accepted == false) { // We have a ^
 					ArrayList<Character> actualAcceptedChars = new ArrayList<Character>();
