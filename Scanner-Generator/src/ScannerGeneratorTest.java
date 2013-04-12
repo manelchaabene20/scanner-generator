@@ -8,7 +8,7 @@ import org.junit.Test;
 
 
 public class ScannerGeneratorTest {
-	/*
+
 	@Test
 	public void testSample() throws Exception {
 
@@ -29,7 +29,7 @@ public class ScannerGeneratorTest {
 			}
 		}
 	}
-	*/
+	
 	
 	@Test
 	public void testCharClass() throws Exception {
