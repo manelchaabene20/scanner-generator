@@ -201,8 +201,6 @@ public class NFA {
 						index++;
 					}
 					
-					
-					
 				}
 				
 			}
@@ -331,8 +329,8 @@ public class NFA {
 	
 	public static void main(String[] args) throws Exception {
 		
-		NFA nfa = new NFA("$DIGIT", "a");
-
-		System.out.println(accepted("aaaaa",nfa.startState));
+		NFA nfa = new NFA("$DIGIT", "apple", true);
+		nfa = star(nfa);
+		System.out.println(accepted("apple",nfa.startState));
 	}
 }
