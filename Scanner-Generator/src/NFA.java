@@ -241,12 +241,16 @@ public class NFA {
 		if(s.length() == 0 && startNode.accept == true){
 			return true;
 		}
-		else if(s.length() == 0 && startNode.accept != true && startNode.getSuccessors().size() > 0){
-			for(Node n : startNode.getSuccessors()){
-				if(n.end && n.accept){
-					return true;
+		else if(s.length() == 0 && startNode.accept != true){
+			if(startNode.getSuccessors().size() > 0){
+				for(Node n : startNode.getSuccessors()){
+					if(n.end && n.accept){
+						return true;
+					}
 				}
 			}
+			return false;
+			
 		}
 		else if(s.length() == 0 && startNode.accept != true ){
 			return false;
@@ -257,22 +261,23 @@ public class NFA {
 				if(s.length() == 0)
 					return true;
 			}
-			if(n.start == true || (n.end == true && n.getSuccessors().size() > 0)){
-				accepted =  accepted(s, n);
+			
+			if(n.start == true){
+				accepted = accepted(s, n);
 				if(accepted){
 					return true;
 				}
 			}
-		else{
-			if(n.transitionChars.size() > 0){
-				if(n.transitionChars.contains(c))
-					accepted = accepted(s.substring(1), n);
-					if(accepted){
-						return true;
+			else{
+				if(n.transitionChars.size() > 0){
+					if(n.transitionChars.contains(c))
+						accepted = accepted(s.substring(1), n);
+						if(accepted){
+							return true;
+						}
 					}
 				}
 			}
-		}
 		return accepted;
 	}
 	
@@ -282,7 +287,6 @@ public class NFA {
 		Node end = new Node();
 		end.end = true;
 		end.accept = true;
-		end.addSuccessor(start);
 		start.start = true;
 		start.accept = false;
 		if(nfa1.isStar || nfa2.isStar){
@@ -292,9 +296,11 @@ public class NFA {
 		nfa1.acceptState.addSuccessor(end);
 		nfa2.acceptState.addSuccessor(end);
 		nfa2.acceptState.accept = false;
+		
 		start.addSuccessor(nfa1.startState);
 		start.addSuccessor(nfa2.startState);
 		nfa1.acceptState = end;
+		nfa2.acceptState = end;
 		NFA out = new NFA(start);
 		out.acceptState = end;
 		return out;
@@ -313,6 +319,8 @@ public class NFA {
 		if(nfa1.isStar && nfa2.isStar){
 			nfa1.startState.accept = true;
 		}
+		//nfa2.startState.start = false;
+		nfa2.acceptState.end = true;
 		nfa1.isStar = false;
 		nfa1.acceptState = nfa2.acceptState;
 		nfa1.isStar = false;
@@ -351,13 +359,15 @@ public class NFA {
 	public static void main(String[] args) throws Exception {
 		
 		NFA nfa = new NFA("$DIGIT", "[0-9]");
-		NFA nfa2 = new NFA("$LOWER","[a-z]");
-		NFA nfa3 = new NFA("$LOWER", "[a-z]");
-		NFA nfa4 = union(nfa2,nfa);
-		nfa4 = star(nfa4);
-		System.out.println(accepted("b",nfa4.startState));
-		NFA nfa5 = concat(nfa3,nfa4);
+		NFA nfa3 = new NFA("","\\.");
+		NFA nfa2 = new NFA("$LOWER","[0-9]");
+		nfa = star(nfa);
+		nfa2 = star(nfa2);
+		
+
+		NFA nfa5 = concat(nfa,nfa3);
+		nfa5 = concat(nfa5,nfa2);
 	
-		System.out.println(accepted("bb1321312b",nfa5.startState));
+		System.out.println(accepted("1",nfa5.startState));
 	}
 }
