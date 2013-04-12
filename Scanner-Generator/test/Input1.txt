@@ -2,4 +2,8 @@ a = 10
 PRINT a
 b = a*10 + 20
 PRINT b
+<<<<<<< HEAD
 PRINT ^^-[]
+=======
+PRINT ^^-][
+>>>>>>> b2e3d6f6f7010b535a89c145b83eff3539c80512
