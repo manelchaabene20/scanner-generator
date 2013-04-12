@@ -100,7 +100,7 @@ public class NFA {
 				} else { // All other characters
 					acceptedChars.add(c);
 				}
-				if (c != ']')
+				if (c != ']' || (c == ']' && regex.charAt(index-1) == '\\'))
 					c = regex.charAt(++index);
 			}
 			if (accepted == false) { // We have a ^
@@ -174,7 +174,7 @@ public class NFA {
 					} else { // All other characters
 						acceptedChars.add(c);
 					}
-					if (c != ']')
+					if (c != ']' || (c == ']' && regex.charAt(index-1) == '\\'))
 						c = regex.charAt(++index);
 				}
 				if (accepted == false) { // We have a ^
