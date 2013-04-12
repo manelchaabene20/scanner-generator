@@ -239,12 +239,23 @@ public class NFA {
 		if(s.length() == 0 && startNode.accept == true){
 			return true;
 		}
-		else if(s.length() == 0 && startNode.accept != true){
+		else if(s.length() == 0 && startNode.accept != true && startNode.getSuccessors().size() > 0){
+			for(Node n : startNode.getSuccessors()){
+				if(n.end && n.accept){
+					return true;
+				}
+			}
+		}
+		else if(s.length() == 0 && startNode.accept != true ){
 			return false;
 		}
 		Character c = s.charAt(0);
 		for(Node n : startNode.getSuccessors()){
-			if(n.start == true){
+			if(n.accept == true && n.end == true){
+				if(s.length() == 0)
+					return true;
+			}
+			if(n.start == true || (n.end == true && n.getSuccessors().size() > 0)){
 				accepted =  accepted(s, n);
 				if(accepted){
 					return true;
@@ -266,16 +277,24 @@ public class NFA {
 	@SuppressWarnings("unchecked")
 	public static NFA union(NFA nfa1, NFA nfa2){
 		Node start = new Node();
+		Node end = new Node();
+		end.end = true;
+		end.accept = true;
+		end.addSuccessor(start);
 		start.start = true;
 		start.accept = false;
 		if(nfa1.isStar || nfa2.isStar){
 			start.accept = true;
 		}
+		nfa1.acceptState.accept = false;
+		nfa1.acceptState.addSuccessor(end);
+		nfa2.acceptState.addSuccessor(end);
+		nfa2.acceptState.accept = false;
 		start.addSuccessor(nfa1.startState);
 		start.addSuccessor(nfa2.startState);
-		nfa1.acceptState = nfa2.acceptState;
+		nfa1.acceptState = end;
 		NFA out = new NFA(start);
-		out.acceptState = nfa2.acceptState;
+		out.acceptState = end;
 		return out;
 	}
 	
@@ -329,8 +348,14 @@ public class NFA {
 	
 	public static void main(String[] args) throws Exception {
 		
-		NFA nfa = new NFA("$DIGIT", "apple", true);
-		nfa = star(nfa);
-		System.out.println(accepted("apple",nfa.startState));
+		NFA nfa = new NFA("$DIGIT", "[0-9]");
+		NFA nfa2 = new NFA("$LOWER","[a-z]");
+		NFA nfa3 = new NFA("$LOWER", "[a-z]");
+		NFA nfa4 = union(nfa2,nfa);
+		nfa4 = star(nfa4);
+		System.out.println(accepted("b",nfa4.startState));
+		NFA nfa5 = concat(nfa3,nfa4);
+	
+		System.out.println(accepted("bb1321312b",nfa5.startState));
 	}
 }
