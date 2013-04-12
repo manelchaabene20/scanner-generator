@@ -24,7 +24,7 @@ public class RecursiveDescentParser {
 		int right_paren = s.indexOf(")");
 		int star = s.indexOf("*");
 		int plus = s.indexOf("+");
-		if (space != -1) {
+		if (space != -1 && space < left_paren) {
 			
 			/* Concatenation operator */
 			String s1 = s.substring(0, space);

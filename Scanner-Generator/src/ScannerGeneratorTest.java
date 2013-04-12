@@ -8,7 +8,7 @@ import org.junit.Test;
 
 
 public class ScannerGeneratorTest {
-	/*
+	
 	@Test
 	public void testSample() throws Exception {
 
@@ -29,7 +29,7 @@ public class ScannerGeneratorTest {
 			}
 		}
 	}
-	*/
+	
 	
 	@Test
 	public void testCharClass() throws Exception {
@@ -87,4 +87,48 @@ public class ScannerGeneratorTest {
 			}
 		}
 	}
+
+	@Test
+	public void testEmptyStringAndConcatInParen() throws Exception {
+
+		String specFile = "test/Spec3.txt";
+		String inputFile = "test/Input3.txt";
+		
+		ScannerGenerator.run(specFile, inputFile);
+		
+		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/Output3.txt"));
+		
+		String correctLine;
+		while ((correctLine = correctOutputReader.readLine()) != null) {
+			String currLine = outputReader.readLine(); 
+
+			if(!currLine.equals(correctLine)){
+				fail("Correct = "+correctLine+"\nFound = "+currLine);
+			}
+		}
+	}
+	
+
+	@Test
+	public void testDot() throws Exception {
+
+		String specFile = "test/Spec4.txt";
+		String inputFile = "test/Input4.txt";
+		
+		ScannerGenerator.run(specFile, inputFile);
+		
+		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/Output4.txt"));
+		
+		String correctLine;
+		while ((correctLine = correctOutputReader.readLine()) != null) {
+			String currLine = outputReader.readLine(); 
+
+			if(!currLine.equals(correctLine)){
+				fail("Correct = "+correctLine+"\nFound = "+currLine);
+			}
+		}
+	}
+
 }
