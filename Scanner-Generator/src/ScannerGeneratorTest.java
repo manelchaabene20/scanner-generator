@@ -88,7 +88,7 @@ public class ScannerGeneratorTest {
 		}
 	}
 
-	@Test (timeout = 5)
+	@Test (timeout = 50)
 	public void testEmptyStringAndConcatInParen() throws Exception {
 
 		String specFile = "test/Spec3.txt";

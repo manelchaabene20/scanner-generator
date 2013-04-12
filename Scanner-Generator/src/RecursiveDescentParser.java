@@ -52,6 +52,7 @@ public class RecursiveDescentParser {
 				return concat(group, "(" + group + ")*");
 			} else {
 				int or_bar = group.indexOf("|");
+				int group_space = group.indexOf(" ");
 				if (or_bar != -1) {
 					String s1 = group.substring(0, or_bar);
 					String s2 = group.substring(or_bar + 1);
@@ -59,6 +60,16 @@ public class RecursiveDescentParser {
 					//System.out.println(s1);
 					//System.out.println(s2);
 					return union(s1, s2);
+				}
+				else if (group_space != -1) {
+					
+					/* Concatenation operator */
+					String s1 = group.substring(0, group_space);
+					String s2 = group.substring(group_space + 1);
+					System.out.println("CONCAT");
+					System.out.println(s1);
+					System.out.println(s2);
+					return concat(s1, s2);
 				}
 				else{
 					if(nfas.containsKey(group)){

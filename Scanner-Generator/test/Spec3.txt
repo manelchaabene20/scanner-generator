@@ -3,4 +3,4 @@ $B B
 $C C
 
 $IDENTIFIER $A ($B)*
-$INT ($B $C)
+$INT ($B $C)*

@@ -2,12 +2,10 @@ a = 10
 b = 20
 c = a & b
 d = b | c
-e = a ? b : c
-f? = 30
-a = $4.00
+e = a b c
+f = 30
+a = 4.01
 g = !a
-PRINT :poop:
-:boom:
 cat
 at
-t
+:t:

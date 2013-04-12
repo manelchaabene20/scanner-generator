@@ -56,6 +56,7 @@ public class ScannerGenerator {
 				} else {
 					/* Simple primitive NFA */
 					NFA nfa = new NFA(var, regex);
+					nfa.print();
 					characterClassNfas.put(var, nfa);
 				}
 			} else {
