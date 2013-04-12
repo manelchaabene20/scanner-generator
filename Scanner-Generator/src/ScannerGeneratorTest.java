@@ -51,5 +51,19 @@ public class ScannerGeneratorTest {
 		}
 	}
 	/* NOTE: left bracket [ fails test case */
+	
+	@Test
+	public void testCharClassError() throws Exception {
+
+		String specFile = "test/Spec2.txt";
+		String inputFile = "test/Input2.txt";
+		
+		try{
+			ScannerGenerator.run(specFile, inputFile);
+			fail("Should have gotten an exception");
+		}
+		catch(Exception e){
+		}
+	}
 
 }
