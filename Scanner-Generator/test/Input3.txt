@@ -1,3 +1,4 @@
 A
 ABB
 BC
+BCBCBC

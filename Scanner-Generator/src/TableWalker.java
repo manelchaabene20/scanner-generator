@@ -30,7 +30,7 @@ public class TableWalker {
 		while ((currLine = inputReader.readLine()) != null) {
 			String[] tokens = currLine.split(" ");
 			for (String s : tokens) {
-				// System.out.println(s);
+				 System.out.println(s);
 				boolean accepted = false;
 				String temp = s;
 				int length = s.length();
@@ -51,7 +51,7 @@ public class TableWalker {
 						if(!accepted){
 							index--;	
 							
-							if(index == -1){
+							if(index <= -1){
 								throw new Exception("Error in input! Invalid character sequence! "+s);
 							}
 							

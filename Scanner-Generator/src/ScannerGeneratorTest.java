@@ -76,7 +76,7 @@ public class ScannerGeneratorTest {
 		ScannerGenerator.run(specFile, inputFile);
 
 		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
-		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/Output3.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/SecondOutput.txt"));
 
 		String correctLine;
 		while ((correctLine = correctOutputReader.readLine()) != null) {
@@ -88,7 +88,7 @@ public class ScannerGeneratorTest {
 		}
 	}
 
-	@Test (timeout = 5)
+	@Test (timeout = 50)
 	public void testEmptyStringAndConcatInParen() throws Exception {
 
 		String specFile = "test/Spec3.txt";
@@ -120,6 +120,49 @@ public class ScannerGeneratorTest {
 		
 		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
 		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/Output4.txt"));
+		
+		String correctLine;
+		while ((correctLine = correctOutputReader.readLine()) != null) {
+			String currLine = outputReader.readLine(); 
+
+			if(!currLine.equals(correctLine)){
+				fail("Correct = "+correctLine+"\nFound = "+currLine);
+			}
+		}
+	}
+	
+
+	@Test (timeout = 50)
+	public void testFloat() throws Exception {
+
+		String specFile = "test/Spec5.txt";
+		String inputFile = "test/Input5.txt";
+		
+		ScannerGenerator.run(specFile, inputFile);
+		
+		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/Output5.txt"));
+		
+		String correctLine;
+		while ((correctLine = correctOutputReader.readLine()) != null) {
+			String currLine = outputReader.readLine(); 
+
+			if(!currLine.equals(correctLine)){
+				fail("Correct = "+correctLine+"\nFound = "+currLine);
+			}
+		}
+	}
+	
+	@Test
+	public void testRandomThings() throws Exception {
+
+		String specFile = "test/Spec6.txt";
+		String inputFile = "test/Input6.txt";
+		
+		ScannerGenerator.run(specFile, inputFile);
+		
+		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/Output6.txt"));
 		
 		String correctLine;
 		while ((correctLine = correctOutputReader.readLine()) != null) {
