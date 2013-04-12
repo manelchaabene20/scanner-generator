@@ -65,6 +65,7 @@ public class NFA {
 	}
 	
 	/**
+	 * Parse in a sub class of another character class 
 	 * @param regex
 	 * @return
 	 * @throws Exception
@@ -235,7 +236,12 @@ public class NFA {
 		return name;
 	}
 
-
+	/**
+	 * Recursively search a NFA to see if a string is accepted
+	 * @param s
+	 * @param startNode
+	 * @return
+	 */
 	public static boolean accepted(String s,Node startNode){
 		boolean accepted = false;
 		if(s.length() == 0 && startNode.accept == true){
@@ -280,7 +286,12 @@ public class NFA {
 			}
 		return accepted;
 	}
-	
+	/**
+	 * Union tow NFAs by adding a start state and a end state
+	 * @param nfa1
+	 * @param nfa2
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static NFA union(NFA nfa1, NFA nfa2){
 		Node start = new Node();
@@ -305,7 +316,12 @@ public class NFA {
 		out.acceptState = end;
 		return out;
 	}
-	
+	/**
+	 * Concatenate two NFAs
+	 * @param nfa1
+	 * @param nfa2
+	 * @return
+	 */
 	public static NFA concat(NFA nfa1, NFA nfa2){
 		nfa1.startState.accept = false;
 		nfa1.acceptState.accept = false;
@@ -327,6 +343,11 @@ public class NFA {
 		return nfa1;
 	}
 	
+	/**
+	 * Make a NFA into a star by pointing the end to the beginning.
+	 * @param nfa
+	 * @return
+	 */
 	public static NFA star(NFA nfa){
 		nfa.acceptState.addSuccessor(nfa.startState);
 		nfa.acceptState.end = true;
@@ -347,22 +368,18 @@ public class NFA {
 	
 	public static NFA union(HashMap<String,NFA> nfas){
 		Node start = new Node();
+		Node end = new Node();
+		end.end = true;
+		end.accept = true;
+		
 		start.start = true;
 		for(NFA n : nfas.values()){
 			start.addSuccessor(n.startState);
+			n.acceptState.addSuccessor(end);
+			n.acceptState.accept = false;
 		}
 		
 		return new NFA(start);
 		
-	}
-	
-	public static void main(String[] args) throws Exception {
-		
-		NFA nfa = new NFA("$B", "B");
-		NFA nfa2 = new NFA("$C", "C");
-		nfa2 = concat(nfa,nfa2);
-		
-
-		System.out.println(accepted("BC",nfa2.startState));
 	}
 }
