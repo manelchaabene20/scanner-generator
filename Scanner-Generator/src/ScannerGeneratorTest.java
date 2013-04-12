@@ -66,4 +66,24 @@ public class ScannerGeneratorTest {
 		}
 	}
 
+	@Test
+	public void testSecondSpec() throws Exception {
+
+		String specFile = "test/SecondSpec.txt";
+		String inputFile = "test/SecondInput.txt";
+
+		ScannerGenerator.run(specFile, inputFile);
+
+		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/Output3.txt"));
+
+		String correctLine;
+		while ((correctLine = correctOutputReader.readLine()) != null) {
+			String currLine = outputReader.readLine();
+
+			if(!currLine.equals(correctLine)){
+				fail("Correct = "+correctLine+"\nFound = "+currLine);
+			}
+		}
+	}
 }
