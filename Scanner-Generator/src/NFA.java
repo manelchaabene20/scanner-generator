@@ -382,4 +382,5 @@ public class NFA {
 		return new NFA(start);
 		
 	}
+	
 }
