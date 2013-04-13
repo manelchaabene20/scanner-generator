@@ -8,8 +8,3 @@ $IDENTIFIER $LOWER ($LOWER|$DIGIT)*
 $INT ($DIGIT)+
 $ASSIGN =
 $FLOAT ($DIGIT)+ \. ($DIGIT)+
-$AND &
-$OR |
-$NOT !
-$DOLLA_BILL $
-$EMOJI : ($LOWER)* :

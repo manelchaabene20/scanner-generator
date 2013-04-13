@@ -2,4 +2,5 @@ $A A
 $B B
 $C C
 
-$EXPR (($C) ($B))|$B
+$EXPR ($C $B)|$B
+$OR (($C) ($A))*

@@ -18,10 +18,36 @@ public class RecursiveDescentParser {
 	 * @throws Exception
 	 */
 	public NFA next(String s) throws Exception {
-		//System.out.println(s);
+		System.out.println(s);
 		int space = s.indexOf(" ");
 		int left_paren = s.indexOf("(");
-		int right_paren = s.lastIndexOf(")");		
+		int right_paren = s.indexOf(")");
+		if(left_paren != -1){
+			String part = s.substring(left_paren+1);
+			int match = -1;
+			while(part.indexOf('(') != -1 || part.indexOf(')') != -1){
+				int left = part.indexOf("(");
+				int right = part.indexOf(")");
+				if((left != -1 && right == -1) || (left != -1 && left < right)){
+					match--;
+					System.out.println("minus match: "+match);
+					if(match == 0){
+						right_paren = (right+s.indexOf(part));
+						break;
+					}
+					part = part.substring(left+1);
+				}
+				else if((right != -1 && left == -1) || (right != -1 && right < left)){
+					match++;
+					System.out.println("plus match: "+match);
+					if(match == 0){
+						right_paren = (right+s.indexOf(part));
+						break;
+					}
+					part = part.substring(right+1);
+				}
+			}
+		}
 		int star = s.indexOf("*");
 		int plus = s.indexOf("+");
 		int or_bar = s.indexOf("|");
@@ -31,12 +57,24 @@ public class RecursiveDescentParser {
 			/* Concatenation operator */
 			String s1 = s.substring(0, space);
 			String s2 = s.substring(space + 1);
-			System.out.println("CONCAT");
+			System.out.println("CONCAT - A");
 			System.out.println(s1);
 			System.out.println(s2);
 			return concat(s1, s2);
 			
-		} else if (left_paren != -1 && right_paren != -1) {
+		} 
+		else if(or_bar != -1 && (or_bar < left_paren || or_bar > right_paren)){
+			String after_bar = s.substring(or_bar+1);
+			int or_space = after_bar.indexOf(" ");
+			if(or_space == -1) or_space = s.length();
+			String s1 = s.substring(0, or_bar);
+			String s2 = s.substring(or_bar + 1,or_space);
+			//System.out.println("UNION");
+			//System.out.println(s1);
+			//System.out.println(s2);
+			return union(s1, s2);
+		}
+		else if (left_paren != -1 && right_paren != -1) {
 			String group = s.substring(left_paren + 1, right_paren);
 
 			System.out.println("GROUP "+group);
@@ -48,7 +86,7 @@ public class RecursiveDescentParser {
 			//System.out.println(after_group);
 			if (after_group.equals("*")) {
 				System.out.println("STAR");
-				return star("("+group+")");
+				return star(group);
 			} else if (after_group.equals("+")) {
 				//System.out.println("PLUS");
 				return concat(group, "(" + group + ")*");
@@ -89,19 +127,8 @@ public class RecursiveDescentParser {
 				}	
 			}
 		}
-		else if(or_bar != -1){
-			String after_bar = s.substring(or_bar+1);
-			int or_space = after_bar.indexOf(" ");
-			if(or_space == -1) or_space = s.length();
-			String s1 = s.substring(0, or_bar);
-			String s2 = s.substring(or_bar + 1,or_space);
-			//System.out.println("UNION");
-			//System.out.println(s1);
-			//System.out.println(s2);
-			return union(s1, s2);
-		}
 		else if(star != -1 && s.substring(star-1,star).matches("\\\\*")==false){
-			System.out.println("STAR "+s);
+			System.out.println("STAR - A "+s);
 			if(star != s.length()-1){
 				throw new Exception("Inproper input! Star in middle of string!");
 			}
