@@ -1,6 +1,6 @@
-$A A
-$B B
-$C C
+$A [A]
+$B [B]
+$C [C]
 
-$EXPR ($C $B)|$B
-$OR (($C) ($A))*
+$EXPR (($B)($C))|$C
+$OR (($C $A))

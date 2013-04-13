@@ -82,7 +82,7 @@ public class ScannerGenerator {
 				} else {
 					/* Simple primitive NFA */
 					NFA nfa = new NFA(var, regex);
-					nfa.print();
+					//nfa.print();
 					characterClassNfas.put(var, nfa);
 				}
 			} else {
@@ -94,14 +94,14 @@ public class ScannerGenerator {
 				// System.out.println(currLine);
 				RecursiveDescentParser parser = new RecursiveDescentParser(
 						characterClassNfas);
-				tokenNfas.put(var, parser.next(regex));
+				
+				NFA newNfa = parser.next(regex);
+				tokenNfas.put(var, newNfa);
 			}
 		}
 
 		/* Combine all NFA's */
-		NFA combined = NFA.union(tokenNfas);		
-
-		// combined.print();
+		//NFA combined = NFA.union(tokenNfas);		
 
 		/* Create Table Walker */
 		TableWalker tw = new TableWalker(tokenNfas);

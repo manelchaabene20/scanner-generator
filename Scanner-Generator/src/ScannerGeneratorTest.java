@@ -132,7 +132,7 @@ public class ScannerGeneratorTest {
 		}
 	}
 	
-	@Test (timeout = 50)
+	@Test (timeout = 150)
 	public void testRandomThings() throws Exception {
 
 		String specFile = "test/Spec6.txt";

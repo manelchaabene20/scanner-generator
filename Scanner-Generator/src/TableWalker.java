@@ -30,7 +30,7 @@ public class TableWalker {
 		while ((currLine = inputReader.readLine()) != null) {
 			String[] tokens = currLine.split(" ");
 			for (String s : tokens) {
-				 System.out.println(s);
+				//System.out.println(s);
 				boolean accepted = false;
 				String temp = s;
 				int length = s.length();
@@ -39,9 +39,11 @@ public class TableWalker {
 					while(accepted == false || temp.length() > 0){
 						for (String name : nfas.keySet()) {
 							NFA nfa = nfas.get(name);
+							System.out.println("temp "+temp);
+							System.out.println("acc?"+NFA.accepted(temp, nfa.getStartState()));
 							if (NFA.accepted(temp, nfa.getStartState())) {
 								// Put this println into a file
-								System.out.println(name.substring(1) + " " + temp);
+								//System.out.println(name.substring(1) + " " + temp);
 								output += name.substring(1) + " " + temp + "\n";
 	
 								accepted = true;

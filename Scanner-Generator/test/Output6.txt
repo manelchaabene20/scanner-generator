@@ -1,2 +1,1 @@
-EXPR CB
-OR CA
+EXPR C

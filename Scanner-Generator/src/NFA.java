@@ -363,6 +363,7 @@ public class NFA {
 		startState.addSuccessor(new Node(old.getAcceptedChars(), true));
 		NFA out = new NFA(startState);
 		out.acceptState = startState.getSuccessors().get(0);
+		System.out.println("ACCEPT "+NFA.accepted("B", startState));
 		return out;
 	}
 	
