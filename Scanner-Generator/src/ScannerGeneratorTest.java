@@ -10,7 +10,7 @@ import org.junit.Test;
 public class ScannerGeneratorTest {
 
 	@Test
-	public void testSample() throws Exception {
+	public void testTA() throws Exception {
 
 		String specFile = "test/spec";
 		String inputFile = "test/input";
@@ -29,7 +29,46 @@ public class ScannerGeneratorTest {
 			}
 		}
 	}
-	
+	@Test
+	public void testTA2() throws Exception {
+
+		String specFile = "test/spec1";
+		String inputFile = "test/input1";
+		
+		ScannerGenerator.run(specFile, inputFile);
+		
+		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/output1"));
+		
+		String correctLine;
+		while ((correctLine = correctOutputReader.readLine()) != null) {
+			String currLine = outputReader.readLine(); 
+
+			if(!currLine.equals(correctLine)){
+				fail("Correct = "+correctLine+"\nFound = "+currLine);
+			}
+		}
+	}
+	@Test
+	public void testTA3() throws Exception {
+
+		String specFile = "test/spec2";
+		String inputFile = "test/input2";
+		
+		ScannerGenerator.run(specFile, inputFile);
+		
+		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/output2"));
+		
+		String correctLine;
+		while ((correctLine = correctOutputReader.readLine()) != null) {
+			String currLine = outputReader.readLine(); 
+
+			if(!currLine.equals(correctLine)){
+				fail("Correct = "+correctLine+"\nFound = "+currLine);
+			}
+		}
+	}
 	
 	@Test (timeout = 100)
 	public void testCharClass() throws Exception {
