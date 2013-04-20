@@ -12,13 +12,13 @@ public class ScannerGeneratorTest {
 	@Test
 	public void testSample() throws Exception {
 
-		String specFile = "test/SampleSpec.txt";
-		String inputFile = "test/SampleInput.txt";
+		String specFile = "test/spec";
+		String inputFile = "test/input";
 		
 		ScannerGenerator.run(specFile, inputFile);
 		
 		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
-		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/SampleOutput.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/output"));
 		
 		String correctLine;
 		while ((correctLine = correctOutputReader.readLine()) != null) {

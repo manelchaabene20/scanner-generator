@@ -8,6 +8,8 @@ public class NFA {
 	private Node startState;
 	private Node acceptState = null;
 	private boolean isStar = false;
+	private Node plusAccept = null;
+	private boolean isPlus = false;
 
 	public NFA(Node node){
 		this.startState = node;
@@ -21,6 +23,7 @@ public class NFA {
 		this.name = name;
 		acceptedChars = new ArrayList<Character>();
 		this.startState = parse(regex);
+		this.plusAccept = new Node();
 		this.acceptState = startState.getSuccessors().get(0);
 
 	}
@@ -267,23 +270,23 @@ public class NFA {
 				if(s.length() == 0)
 					return true;
 			}
-			
-			if(n.start == true){
+			if(n.transitionChars.size() > 0){
+				if(n.transitionChars.contains(c)){
+					accepted = accepted(s.substring(1), n);
+					if(accepted){
+						return true;
+					}
+				}
+			}
+			else{
 				accepted = accepted(s, n);
 				if(accepted){
 					return true;
 				}
 			}
-			else{
-				if(n.transitionChars.size() > 0){
-					if(n.transitionChars.contains(c))
-						accepted = accepted(s.substring(1), n);
-						if(accepted){
-							return true;
-						}
-					}
-				}
-			}
+		}
+			
+			
 		return accepted;
 	}
 	/**
@@ -328,10 +331,15 @@ public class NFA {
 		nfa1.acceptState.addSuccessor(nfa2.startState);
 		if(nfa2.isStar){
 			nfa1.acceptState.accept = true;
+			nfa1.plusAccept = nfa1.acceptState;
+			nfa1.isPlus = true;
 		}
 		else{
 			nfa1.acceptState.accept = false;
-		}	
+		}
+		if(nfa1.isPlus){
+			nfa1.plusAccept.addSuccessor(nfa2.startState);
+		}
 		if(nfa1.isStar && nfa2.isStar){
 			nfa1.startState.accept = true;
 		}
@@ -339,7 +347,6 @@ public class NFA {
 		nfa2.acceptState.end = true;
 		nfa1.isStar = false;
 		nfa1.acceptState = nfa2.acceptState;
-		nfa1.isStar = false;
 		return nfa1;
 	}
 	
