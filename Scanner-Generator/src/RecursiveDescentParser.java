@@ -18,7 +18,7 @@ public class RecursiveDescentParser {
 	 * @throws Exception
 	 */
 	public NFA next(String s) throws Exception {
-		System.out.println(s);
+		//System.out.println(s);
 		int space = s.indexOf(" ");
 		int left_paren = s.indexOf("(");
 		int right_paren = s.indexOf(")");
@@ -30,7 +30,7 @@ public class RecursiveDescentParser {
 				int right = part.indexOf(")");
 				if((left != -1 && right == -1) || (left != -1 && left < right)){
 					match--;
-					System.out.println("minus match: "+match);
+					//System.out.println("minus match: "+match);
 					if(match == 0){
 						right_paren = (right+s.indexOf(part));
 						break;
@@ -39,7 +39,7 @@ public class RecursiveDescentParser {
 				}
 				else if((right != -1 && left == -1) || (right != -1 && right < left)){
 					match++;
-					System.out.println("plus match: "+match);
+					//System.out.println("plus match: "+match);
 					if(match == 0){
 						right_paren = (right+s.indexOf(part));
 						break;
@@ -52,17 +52,17 @@ public class RecursiveDescentParser {
 		int plus = s.indexOf("+");
 		int or_bar = s.indexOf("|");
 		
-		System.out.println("left paren == "+left_paren);
-		System.out.println("right paren == "+right_paren);
-		System.out.println("space = "+space);
+		//System.out.println("left paren == "+left_paren);
+		//System.out.println("right paren == "+right_paren);
+		//System.out.println("space = "+space);
 		if ((space != -1 && left_paren == -1) || (space != -1 && (space < left_paren || space > right_paren) )) {
 			
 			/* Concatenation operator */
 			String s1 = s.substring(0, space);
 			String s2 = s.substring(space + 1);
-			System.out.println("CONCAT - A");
-			System.out.println(s1);
-			System.out.println(s2);
+			//System.out.println("CONCAT - A");
+			//System.out.println(s1);
+			//System.out.println(s2);
 			return concat(s1, s2);
 			
 		} 
@@ -72,26 +72,26 @@ public class RecursiveDescentParser {
 			if(or_space == -1) or_space = s.length();
 			String s1 = s.substring(0, or_bar);
 			String s2 = s.substring(or_bar + 1,or_space);
-			System.out.println("UNION - A");
-			System.out.println(s1);
-			System.out.println(s2);
+			//System.out.println("UNION - A");
+			//System.out.println(s1);
+			//System.out.println(s2);
 			return union(s1, s2);
 		}
 		else if (left_paren != -1 && right_paren != -1) {
 			String group = s.substring(left_paren + 1, right_paren);
 
-			System.out.println("GROUP "+group);
+			//System.out.println("GROUP "+group);
 			
 			String after_group = "";
 			if(right_paren+1 < s.length()){
 				after_group = s.substring(right_paren + 1, right_paren + 2);
 			}
-			//System.out.println(after_group);
+			////System.out.println(after_group);
 			if (after_group.equals("*")) {
-				System.out.println("STAR");
+				//System.out.println("STAR");
 				return star(group);
 			} else if (after_group.equals("+")) {
-				//System.out.println("PLUS");
+				////System.out.println("PLUS");
 				return concat(group, "(" + group + ")*");
 			} else {
 				int bar = group.indexOf("|");
@@ -99,9 +99,9 @@ public class RecursiveDescentParser {
 				if (bar != -1) {
 					String s1 = group.substring(0, bar);
 					String s2 = group.substring(bar + 1);
-					System.out.println("UNION");
-					System.out.println(s1);
-					System.out.println(s2);
+					//System.out.println("UNION");
+					//System.out.println(s1);
+					//System.out.println(s2);
 					return union(s1, s2);
 				}
 				else if (group_space != -1) {
@@ -109,18 +109,18 @@ public class RecursiveDescentParser {
 					/* Concatenation operator */
 					String s1 = group.substring(0, group_space);
 					String s2 = group.substring(group_space + 1);
-					System.out.println("CONCAT");
-					System.out.println(s1);
-					System.out.println(s2);
+					//System.out.println("CONCAT");
+					//System.out.println(s1);
+					//System.out.println(s2);
 					return concat(s1, s2);
 				}
 				else if(s.charAt(left_paren+1) == '('){
-					System.out.println("PAREN GROUP "+group);
+					//System.out.println("PAREN GROUP "+group);
 					return next(group);
 				}
 				else{
 					if(nfas.containsKey(group)){
-						System.out.println("NFA "+group);
+						//System.out.println("NFA "+group);
 						
 						return NFA.clone(nfas.get(group));
 						
@@ -131,7 +131,7 @@ public class RecursiveDescentParser {
 			}
 		}
 		else if(star != -1 && s.substring(star-1,star).matches("\\\\*")==false){
-			System.out.println("STAR - A "+s);
+			//System.out.println("STAR - A "+s);
 			if(star != s.length()-1){
 				throw new Exception("Inproper input! Star in middle of string!");
 			}
@@ -144,7 +144,7 @@ public class RecursiveDescentParser {
 			}
 		}
 		else if(plus != -1 && s.substring(plus-1,plus).matches("\\\\*")==false){
-			System.out.println("PLUS "+s);
+			//System.out.println("PLUS "+s);
 			if(plus != s.length()-1){
 				throw new Exception("Inproper input! Star in middle of string!");
 			}
@@ -158,7 +158,7 @@ public class RecursiveDescentParser {
 		}
 		else{
 			if(nfas.containsKey(s)){
-				System.out.println("NFA "+s);
+				//System.out.println("NFA "+s);
 				return NFA.clone(nfas.get(s));
 			}
 			

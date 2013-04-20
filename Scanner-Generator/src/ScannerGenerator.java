@@ -32,7 +32,7 @@ public class ScannerGenerator {
 
 			// run the scanner generator
 			run(spec, input);
-			System.out.println("See results in output.txt");
+			//System.out.println("See results in output.txt");
 
 			System.out
 					.println("To run a new test type 'again'. To quit enter 'quit'.");
@@ -91,7 +91,7 @@ public class ScannerGenerator {
 				String var = currLine.substring(0, currLine.indexOf(" "));
 				String regex = currLine.substring(currLine.indexOf(" ") + 1);
 
-				// System.out.println(currLine);
+				// //System.out.println(currLine);
 				RecursiveDescentParser parser = new RecursiveDescentParser(
 						characterClassNfas);
 				
@@ -107,16 +107,16 @@ public class ScannerGenerator {
 		TableWalker tw = new TableWalker(tokenNfas);
 		tw.scan(inputFile);
 
-		// System.out.println("CHARACTER CLASSES");
+		// //System.out.println("CHARACTER CLASSES");
 		for (String name : characterClassNfas.keySet()) {
-			// System.out.println(name);
+			// //System.out.println(name);
 			NFA nfa = characterClassNfas.get(name);
 			// nfa.print();
 		}
-		// System.out.println("-----------------------------------");
-		// System.out.println("TOKENS");
+		// //System.out.println("-----------------------------------");
+		// //System.out.println("TOKENS");
 		for (String name : tokenNfas.keySet()) {
-			// System.out.println(name);
+			// //System.out.println(name);
 			NFA nfa = tokenNfas.get(name);
 			// nfa.print();
 		}

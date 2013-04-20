@@ -224,7 +224,7 @@ public class NFA {
 		Node node = this.startState;
 		while(node.accept == false){
 			for (Node n : node.getSuccessors()) {
-				System.out.println(n.transitionChars);
+				//System.out.println(n.transitionChars);
 			}
 			node = node.getSuccessors().get(0);
 		}
@@ -370,7 +370,7 @@ public class NFA {
 		startState.addSuccessor(new Node(old.getAcceptedChars(), true));
 		NFA out = new NFA(startState);
 		out.acceptState = startState.getSuccessors().get(0);
-		System.out.println("ACCEPT "+NFA.accepted("B", startState));
+		//System.out.println("ACCEPT "+NFA.accepted("B", startState));
 		return out;
 	}
 	
