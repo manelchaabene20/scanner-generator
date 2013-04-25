@@ -63,7 +63,7 @@ public class ScannerGenerator {
 				token = true;
 				continue;
 			}
-
+			System.out.println(currLine);
 			/* Read in spec and generate primitive NFA for each character class */
 			if (token == false) {
 

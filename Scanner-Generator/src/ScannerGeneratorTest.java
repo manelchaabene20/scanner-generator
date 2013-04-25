@@ -29,6 +29,27 @@ public class ScannerGeneratorTest {
 			}
 		}
 	}
+	
+	@Test
+	public void testPhase2() throws Exception {
+
+		String specFile = "test/token_spec.txt";
+		String inputFile = "test/input";
+		
+		ScannerGenerator.run(specFile, inputFile);
+		
+		BufferedReader outputReader = new BufferedReader(new FileReader("output.txt"));
+		BufferedReader correctOutputReader = new BufferedReader(new FileReader("test/output"));
+		
+		String correctLine;
+		while ((correctLine = correctOutputReader.readLine()) != null) {
+			String currLine = outputReader.readLine(); 
+
+			if(!currLine.equals(correctLine)){
+				//fail("Correct = "+correctLine+"\nFound = "+currLine);
+			}
+		}
+	}
 	@Test
 	public void testTA2() throws Exception {
 
