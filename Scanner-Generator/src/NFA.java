@@ -28,31 +28,41 @@ public class NFA {
 
 	}
 	public NFA(String name, String accepted, boolean something) throws Exception{
-		this.name = name;
-		ArrayList<Character> str = new ArrayList<Character>();
-		int index = 0;
-		Character c = accepted.charAt(index);
-		while(index < accepted.length()){
-			c = accepted.charAt(index);
-			if(c == '\\'){
-				index++;
-			}
-			else{
-				str.add(c);
-				index++;
-			}
+		if(accepted == ""){
+			this.name = name;
+			Node start = new Node();
+			this.startState = start;
+			startState.start = true;
+			start.accept = true;
+			this.acceptState = start;
+			this.startState.end = true;
 		}
-		Node start = new Node();
-		this.startState = start;
-		Node temp = start;
-		for(Character ch : str){
-			temp.addSuccessor(new Node(ch));
-			temp = temp.getSuccessors().get(0);
+		else{
+			this.name = name;
+			ArrayList<Character> str = new ArrayList<Character>();
+			int index = 0;
+			Character c = accepted.charAt(index);
+			while(index < accepted.length()){
+				c = accepted.charAt(index);
+				if(c == '\\'){
+					index++;
+				}
+				else{
+					str.add(c);
+					index++;
+				}
+			}
+			Node start = new Node();
+			this.startState = start;
+			Node temp = start;
+			for(Character ch : str){
+				temp.addSuccessor(new Node(ch));
+				temp = temp.getSuccessors().get(0);
+			}
+			startState.start = true;
+			temp.accept = true;
+			this.acceptState = temp;
 		}
-		startState.start = true;
-		temp.accept = true;
-		this.acceptState = temp;
-		
 	}
 	public NFA(String name, String regex, NFA prev) throws Exception {
 		this.acceptedChars = new ArrayList<Character>();
