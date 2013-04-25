@@ -28,7 +28,7 @@ public class NFA {
 
 	}
 	public NFA(String name, String accepted, boolean something) throws Exception{
-		if(accepted == ""){
+		if(accepted.equals("")){
 			this.name = name;
 			Node start = new Node();
 			this.startState = start;
