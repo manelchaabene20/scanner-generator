@@ -67,7 +67,7 @@ public class RecursiveDescentParser {
 			
 		} 
 		else if(or_bar != -1 && (or_bar < left_paren || or_bar > right_paren)){
-			String after_bar = s.substring(or_bar+1);
+			String after_bar = s.substring(or_bar+1);			
 			int or_space = after_bar.indexOf(" ");
 			if(or_space == -1) or_space = s.length();
 			String s1 = s.substring(0, or_bar);
@@ -157,11 +157,11 @@ public class RecursiveDescentParser {
 			}
 		}
 		else{
-			if(nfas.containsKey(s)){
+			System.out.println("s: "+s);
+			if(!s.equals("") && nfas.containsKey(s)){
 				//System.out.println("NFA "+s);
 				return NFA.clone(nfas.get(s));
 			}
-			
 			else return new NFA(s,s, true);
 		}
 	}
