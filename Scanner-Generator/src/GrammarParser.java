@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class GrammarParser {
 	public static void main(String[] args) throws IOException{
-		String grammarFile = "test/grammar.txt";
+		String grammarFile = "test/testGrammar.txt";
 		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
 		
 		String currLine;
@@ -35,12 +35,13 @@ public class GrammarParser {
 			}
 			rules.put(left, r);			
 		}
-
-		HashMap<String, ArrayList<String>> temp =  FirstSet(rules);
+		HashMap<String, ArrayList<String>> something = FirstSet(rules);
 		
 	}
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
 		ArrayList<String> out = new ArrayList<String>();
+		
+		
 		if(nonTerminal.equals("<epsilon>")){
 			out.add("<epsilon>");
 		}
@@ -79,21 +80,7 @@ public class GrammarParser {
 			System.out.println(" ");
 			
 		}
-		/*iterate 1000 times!
-		for(String key : rules.keySet()){
-			for(String rule : rules.get(key)){
-				int k = 1;
-				String[] splitRule = rule.split(" ");
-				if(firstSet.get(key).size() > 0){
-					
-				}
-				else{
-					ArrayList<String> arr = first(key,rules);
-					firstSet.get(key).add
-				}
-			}
-		}
-		*/
+
 
 		return firstSet;
 	}
