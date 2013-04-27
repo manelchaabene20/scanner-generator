@@ -1,6 +1,6 @@
 <MiniRE-program> ::= begin <statement-list> end
-<statement-list> ::= <statement> <statement-list-tail>
-<statement-list-tail> ::= <statement> <statement-list-tail> | <epsilon>
+<statement-list> ::= <statement><statement-list-tail>
+<statement-list-tail> ::= <statement><statement-list-tail> | <epsilon>
 <statement> ::= replace REGEX with ASCII-STR in  <file-names> ;
 <statement> ::= recursivereplace REGEX with ASCII-STR in  <file-names> ;
 <statement> ::= ID = <statement-righthand> ;
