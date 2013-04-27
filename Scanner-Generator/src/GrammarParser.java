@@ -35,7 +35,46 @@ public class GrammarParser {
 			}
 			rules.put(left, r);			
 		}
-		HashMap<String, ArrayList<String>> something = FirstSet(rules);
+
+
+		HashMap<String, ArrayList<String>> firstSet =  FirstSet(rules);
+		System.out.println("---------------------------------------------------");
+		System.out.println("First Set");
+		System.out.println("---------------------------------------------------");
+		for(String left: firstSet.keySet()){
+			System.out.println("RULE: "+left);
+			System.out.print("{");
+			for(int i=0; i<firstSet.get(left).size(); i++){
+				String symbol = firstSet.get(left).get(i);
+				if(i == firstSet.get(left).size()-1)
+					System.out.print(symbol);
+				else
+					System.out.print(symbol+", ");
+			}
+			System.out.print("}");
+			System.out.println();
+			System.out.println();
+		}
+		System.out.println();
+		HashMap<String, ArrayList<String>> followSet = FollowSet(rules, firstSet, first_rule);
+		System.out.println("---------------------------------------------------");
+		System.out.println("Follow Set");
+		System.out.println("---------------------------------------------------");
+		for(String left: followSet.keySet()){
+			System.out.println("RULE: "+left);
+			System.out.print("{");
+			for(int i=0; i<followSet.get(left).size(); i++){
+				String symbol = followSet.get(left).get(i);
+				if(i == followSet.get(left).size()-1)
+					System.out.print(symbol);
+				else
+					System.out.print(symbol+", ");
+			}
+			System.out.print("}");
+			System.out.println();
+
+		}
+
 		
 	}
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
@@ -72,16 +111,6 @@ public class GrammarParser {
 				firstSet.get(s).add(str);
 			}
 		}
-		for(String s : rules.keySet()){
-			System.out.println("Key : " + s);
-			for(String str : firstSet.get(s)){
-				System.out.print(str + " ");
-			}
-			System.out.println(" ");
-			
-		}
-
-
 		return firstSet;
 	}
 	
@@ -111,42 +140,72 @@ public class GrammarParser {
 			/* For each production rule X-->X1,X2,...Xn */
 			for (String left: rules.keySet()){
 				for(String right: rules.get(left)){
+					//System.out.println();
+					//System.out.println("RULE: "+left+" ::== "+right);
 					
 					String after = new String(right);
 					/* For each Xi that is a nonterminal */
 					ArrayList<String> nonterminals = getNonterminals(right);
+										
 					for(String nonterminal: nonterminals){
+						//System.out.println("Nonterminal: "+nonterminal);
 						
 						ArrayList<String> symbols = follow.get(nonterminal);
 						
 						/* Find what comes after nonterminal Xi */
 						after = after.substring(after.indexOf(nonterminal));
 						ArrayList<String> tokens = getTokens(after);
-						String immediatelyFollowing = tokens.get(0);
 						
-						/* NOTE: should do Xi+1....Xn or just Xi+1??? */
+						/*System.out.println("TOKENS");
+						for(String t: tokens){
+							System.out.print(t+"   ");
+						}
+						System.out.println();*/
 						
-						for(String firstSymbol: first.get(immediatelyFollowing)){
-							
-							/* If epsilon is in First(Xi+1...Xn) then add the Follow(X) */
-							if(firstSymbol.equals("<epsilon>")){
-								
-								for(String followSymbol: follow.get(left)){
-									if(!symbols.contains(followSymbol)){
-										symbols.add(followSymbol);
-										changes = true;
-									}
-								}
-							}
-							else{
-								/* Add the First(Xi+1....Xn) to the Follow(Xi) */
-								if(!symbols.contains(firstSymbol)){
-									symbols.add(firstSymbol);
+						/* Nothing follows the nonterminal -- do Follow(X) */
+						if(tokens.size()<2){
+							for(String followSymbol: follow.get(left)){
+								if(!symbols.contains(followSymbol)){
+									symbols.add(followSymbol);
 									changes = true;
 								}
 							}
 						}
+						else{
+							String immediatelyFollowing = tokens.get(1);
+							
+							/* If a terminal follows the Xi */
+							if(!nonterminals.contains(immediatelyFollowing)){
+								if(!symbols.contains(immediatelyFollowing)){
+									symbols.add(immediatelyFollowing);
+								}
+							}
+							else{
+								/* Add the First(Xi+1) to Follow(Xi) */
+								for(String firstSymbol: first.get(immediatelyFollowing)){
+									
+									/* If epsilon is in First(Xi+1...Xn) then add the Follow(X) */
+									if(firstSymbol.equals("<epsilon>")){
+										
+										for(String followSymbol: follow.get(left)){
+											if(!symbols.contains(followSymbol)){
+												symbols.add(followSymbol);
+												changes = true;
+											}
+										}
+									}
+									else{
+										/* Add the First(Xi+1....Xn) to the Follow(Xi) */
+										if(!symbols.contains(firstSymbol)){
+											symbols.add(firstSymbol);
+											changes = true;
+										}
+									}								
+								}
+							}
+						}
 						follow.put(nonterminal, symbols);
+						
 					}
 					
 				}
@@ -164,47 +223,42 @@ public class GrammarParser {
 		while(true){
 			int leftarrow = s.indexOf("<");
 			if(leftarrow == -1) break;
-			int rightarrow = s.indexOf(">");
-			String nonterminal = s.substring(leftarrow+1, rightarrow).trim();
-			nonterminals.add(nonterminal);
+			int rightarrow = s.substring(leftarrow).indexOf(">")+s.substring(0,leftarrow).length();
+			String nonterminal = s.substring(leftarrow, rightarrow+1).trim();
+			if(!nonterminal.equals("<epsilon>")){
+				nonterminals.add(nonterminal);			
+			}	
 			s = s.substring(rightarrow+1);
 		}
 		return nonterminals;
 	}
 	
 	public static ArrayList<String> getTokens(String s){
+		s = s.trim();
 		ArrayList<String> tokens = new ArrayList<String>();
 		while(true){
 			int space = s.indexOf(" ");
-			int leftarrow = s.indexOf("<");
-			if(leftarrow == -1 && space == -1) break;
+			int leftarrow = s.indexOf("<");			
 			int rightarrow = s.indexOf(">");
+			int leftarrow2 = s.substring(rightarrow+1).indexOf("<");
 			
-			if(leftarrow < space && leftarrow != -1){
-				String nonterminal = s.substring(leftarrow+1, rightarrow).trim();
-				tokens.add(nonterminal);
-				s = s.substring(rightarrow+1);
+			/* No more tokens */
+			if((leftarrow == -1 || leftarrow == 0) && leftarrow2 ==-1 && space == -1){
+				tokens.add(s.trim());
+				break;
 			}
+			
+			/* The < symbol appears first */
+			if(leftarrow < space && leftarrow != -1){
+				String nonterminal = s.substring(leftarrow, rightarrow+1).trim();
+				tokens.add(nonterminal);
+				s = s.substring(rightarrow+1).trim();
+			}
+			/* The space symbol appears first */
 			else{
-				int space2 = s.indexOf(" ");
-				int leftarrow2 = s.indexOf("<");
-				/* If the end of the string has been reached */
-				if(leftarrow == -1 && space == -1){
-					String terminal = s.substring(space+1).trim();
-					tokens.add(terminal);
-					break;
-				}
-				/* If the < symbol comes first */
-				if(leftarrow2 == -1 || space2 < leftarrow2){
-					String terminal = s.substring(space+1,space2);
-					tokens.add(terminal);
-				}
-				/* If the space symbol comes first */
-				/* space2 == -1 || leftarrow2 < space2 */
-				else{
-					String terminal = s.substring(space+1,leftarrow2);
-					tokens.add(terminal);
-				}
+				String nonterminal = s.substring(0, space).trim();
+				tokens.add(nonterminal);
+				s = s.substring(space+1).trim();
 			}
 			
 		}
