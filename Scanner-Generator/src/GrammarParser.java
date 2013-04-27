@@ -74,7 +74,24 @@ public class GrammarParser {
 			System.out.println();
 		}
 		
+		
 	}
+	
+	public static HashMap<String, HashMap<String, String>> ParsingTable(HashMap<String,String> rules, HashMap<String, ArrayList<String>> first, HashMap<String, ArrayList<String>> follow){
+		HashMap<String, HashMap<String, String>> table = new HashMap<String, HashMap<String, String>>();
+		
+		
+		
+		
+		return table;
+	}
+	
+	public static ArrayList<String> getAllNonterminals(HashMap<String,ArrayList<String>> rules){
+		ArrayList<String> nonterminals = new ArrayList<String>();
+		
+		return null;
+	}
+	
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
 		ArrayList<String> out = new ArrayList<String>();
 		if(nonTerminal.equals("<epsilon>")){
@@ -269,7 +286,7 @@ public class GrammarParser {
 			}
 			
 			/* The < symbol appears first */
-			if(leftarrow < space && leftarrow != -1){
+			if(leftarrow != -1 && ((leftarrow < space && space !=-1) || (leftarrow > space && space == -1))){
 				String nonterminal = s.substring(leftarrow, rightarrow+1).trim();
 				tokens.add(nonterminal);
 				s = s.substring(rightarrow+1).trim();
