@@ -36,7 +36,35 @@ public class GrammarParser {
 			rules.put(left, r);			
 		}
 
-		HashMap<String, ArrayList<String>> temp =  FirstSet(rules);
+		HashMap<String, ArrayList<String>> firstSet =  FirstSet(rules);
+		System.out.println("---------------------------------------------------");
+		System.out.println("First Set");
+		System.out.println("---------------------------------------------------");
+		for(String left: firstSet.keySet()){
+			System.out.println("RULE: "+left);
+			System.out.print("{");
+			for(String symbol: firstSet.get(left)){
+				System.out.print(symbol+", ");
+			}
+			System.out.print("}");
+			System.out.println();
+			System.out.println();
+		}
+		System.out.println();
+		HashMap<String, ArrayList<String>> followSet = FollowSet(rules, firstSet, first_rule);
+		System.out.println("---------------------------------------------------");
+		System.out.println("Follow Set");
+		System.out.println("---------------------------------------------------");
+		for(String left: followSet.keySet()){
+			System.out.println("RULE: "+left);
+			System.out.print("{");
+			for(String symbol: followSet.get(left)){
+				System.out.print(symbol+", ");
+			}
+			System.out.print("}");
+			System.out.println();
+			System.out.println();
+		}
 		
 	}
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
@@ -70,7 +98,7 @@ public class GrammarParser {
 			for(String str : arr){
 				firstSet.get(s).add(str);
 			}
-		}
+		}/*
 		for(String s : rules.keySet()){
 			System.out.println("Key : " + s);
 			for(String str : firstSet.get(s)){
@@ -78,7 +106,7 @@ public class GrammarParser {
 			}
 			System.out.println(" ");
 			
-		}
+		}*/
 		/*iterate 1000 times!
 		for(String key : rules.keySet()){
 			for(String rule : rules.get(key)){
@@ -125,9 +153,13 @@ public class GrammarParser {
 			for (String left: rules.keySet()){
 				for(String right: rules.get(left)){
 					
+					//System.out.println("RULE: "+left+" ::== "+right);
+					
 					String after = new String(right);
 					/* For each Xi that is a nonterminal */
 					ArrayList<String> nonterminals = getNonterminals(right);
+								
+					
 					for(String nonterminal: nonterminals){
 						
 						ArrayList<String> symbols = follow.get(nonterminal);
@@ -135,10 +167,12 @@ public class GrammarParser {
 						/* Find what comes after nonterminal Xi */
 						after = after.substring(after.indexOf(nonterminal));
 						ArrayList<String> tokens = getTokens(after);
+						
+						
+						
 						String immediatelyFollowing = tokens.get(0);
 						
 						/* NOTE: should do Xi+1....Xn or just Xi+1??? */
-						
 						for(String firstSymbol: first.get(immediatelyFollowing)){
 							
 							/* If epsilon is in First(Xi+1...Xn) then add the Follow(X) */
@@ -177,46 +211,57 @@ public class GrammarParser {
 		while(true){
 			int leftarrow = s.indexOf("<");
 			if(leftarrow == -1) break;
-			int rightarrow = s.indexOf(">");
-			String nonterminal = s.substring(leftarrow+1, rightarrow).trim();
-			nonterminals.add(nonterminal);
+			int rightarrow = s.substring(leftarrow).indexOf(">")+s.substring(0,leftarrow).length();
+			String nonterminal = s.substring(leftarrow, rightarrow+1).trim();
+			if(!nonterminal.equals("<epsilon>")){
+				nonterminals.add(nonterminal);			
+			}	
 			s = s.substring(rightarrow+1);
 		}
 		return nonterminals;
 	}
 	
 	public static ArrayList<String> getTokens(String s){
+		s = s.trim();
 		ArrayList<String> tokens = new ArrayList<String>();
 		while(true){
 			int space = s.indexOf(" ");
 			int leftarrow = s.indexOf("<");
+			
 			if(leftarrow == -1 && space == -1) break;
 			int rightarrow = s.indexOf(">");
 			
+			/* The < symbol appears first */
 			if(leftarrow < space && leftarrow != -1){
-				String nonterminal = s.substring(leftarrow+1, rightarrow).trim();
+				String nonterminal = s.substring(leftarrow, rightarrow+1).trim();
 				tokens.add(nonterminal);
-				s = s.substring(rightarrow+1);
+				s = s.substring(rightarrow+1).trim();
 			}
+			/* The space symbol appears first */
 			else{
-				int space2 = s.indexOf(" ");
+				int space2 = s.substring(space+1).indexOf(" ");
+				if(space2 != -1) space2 += s.substring(0,space+1).length();
 				int leftarrow2 = s.indexOf("<");
 				/* If the end of the string has been reached */
-				if(leftarrow == -1 && space == -1){
+				if((leftarrow2 == -1 || leftarrow2 == 0) && space2 == -1){
 					String terminal = s.substring(space+1).trim();
 					tokens.add(terminal);
 					break;
 				}
 				/* If the < symbol comes first */
-				if(leftarrow2 == -1 || space2 < leftarrow2){
-					String terminal = s.substring(space+1,space2);
+				if(leftarrow2 == -1 || (space2 < leftarrow2 && space != -1)){
+					String terminal = s.substring(space+1,space2).trim();
 					tokens.add(terminal);
+					if(space2+1 >= s.length()) break;
+					s = s.substring(space2+1).trim();
 				}
 				/* If the space symbol comes first */
 				/* space2 == -1 || leftarrow2 < space2 */
 				else{
 					String terminal = s.substring(space+1,leftarrow2);
 					tokens.add(terminal);
+					if(leftarrow2+1 >= s.length()) break;
+					s = s.substring(leftarrow2+1).trim();
 				}
 			}
 			
