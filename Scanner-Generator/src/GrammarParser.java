@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class GrammarParser {
 	public static void main(String[] args) throws IOException{
-		String grammarFile = "test/grammar.txt";
+		String grammarFile = "test/testGrammar.txt";
 		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
 		
 		String currLine;
@@ -35,6 +35,7 @@ public class GrammarParser {
 			}
 			rules.put(left, r);			
 		}
+
 
 		HashMap<String, ArrayList<String>> firstSet =  FirstSet(rules);
 		System.out.println("---------------------------------------------------");
@@ -71,8 +72,9 @@ public class GrammarParser {
 			}
 			System.out.print("}");
 			System.out.println();
-			System.out.println();
+
 		}
+
 		
 		
 	}
@@ -94,6 +96,8 @@ public class GrammarParser {
 	
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
 		ArrayList<String> out = new ArrayList<String>();
+		
+		
 		if(nonTerminal.equals("<epsilon>")){
 			out.add("<epsilon>");
 		}
@@ -123,31 +127,7 @@ public class GrammarParser {
 			for(String str : arr){
 				firstSet.get(s).add(str);
 			}
-		}/*
-		for(String s : rules.keySet()){
-			System.out.println("Key : " + s);
-			for(String str : firstSet.get(s)){
-				System.out.print(str + " ");
-			}
-			System.out.println(" ");
-			
-		}*/
-		/*iterate 1000 times!
-		for(String key : rules.keySet()){
-			for(String rule : rules.get(key)){
-				int k = 1;
-				String[] splitRule = rule.split(" ");
-				if(firstSet.get(key).size() > 0){
-					
-				}
-				else{
-					ArrayList<String> arr = first(key,rules);
-					firstSet.get(key).add
-				}
-			}
 		}
-		*/
-
 		return firstSet;
 	}
 	
