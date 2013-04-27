@@ -96,8 +96,7 @@ public class GrammarParser {
 	
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
 		ArrayList<String> out = new ArrayList<String>();
-		System.out.println(nonTerminal.trim());
-		ArrayList<String> tokens = getTokens(nonTerminal);
+		ArrayList<String> tokens = getTokens(nonTerminal.trim());
 		
 		if(tokens.get(0).equals("<epsilon>")){
 			out.add("<epsilon>");
