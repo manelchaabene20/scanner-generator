@@ -7,15 +7,12 @@ import java.util.HashMap;
 
 public class GrammarParser {
 	public static void main(String[] args) throws IOException{
-		String specFile = "test/grammar.txt";
-		BufferedReader specReader = new BufferedReader(new FileReader(specFile));
+		String grammarFile = "test/grammar.txt";
+		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
 		
 		String currLine;
 	
-		HashMap<String, String[]> characterClassNfas = new HashMap<String, String[]>();
-		HashMap<String, NFA> tokenNfas = new HashMap<String, NFA>();
-	
-		while ((currLine = specReader.readLine()) != null){
+		while ((currLine = grammarReader.readLine()) != null){
 			String[] line = currLine.split("::=");
 			String[] right = line[1].split(" ");
 			
