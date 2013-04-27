@@ -72,6 +72,7 @@ public class GrammarParser {
 			}
 			System.out.print("}");
 			System.out.println();
+			System.out.println();
 
 		}
 
@@ -90,8 +91,28 @@ public class GrammarParser {
 	
 	public static ArrayList<String> getAllNonterminals(HashMap<String,ArrayList<String>> rules){
 		ArrayList<String> nonterminals = new ArrayList<String>();
-		
-		return null;
+		for(String left: rules.keySet()){
+			if(!nonterminals.contains(left))
+				nonterminals.add(left);
+		}
+		return nonterminals;
+	}
+	
+	public static ArrayList<String> getAllTerminals(HashMap<String,ArrayList<String>> rules){
+		ArrayList<String> terminals = new ArrayList<String>();
+		for(String left: rules.keySet()){
+			for(String right: rules.get(left)){
+				ArrayList<String> nonterminals = getNonterminals(right);
+				ArrayList<String> tokens = getTokens(right);
+				
+				for(String token: tokens){
+					if(!nonterminals.contains(token) && !terminals.contains(token)){
+						terminals.add(token);
+					}
+				}
+			}
+		}
+		return terminals;
 	}
 	
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
