@@ -58,8 +58,12 @@ public class LL1Parser {
 				
 			}
 			
-			String token = tokens.get(0);
-			String tokenName = tokenNames.get(0);
+			String token = "";
+			String tokenName = "";
+			if(tokens.size() > 0){
+				token = tokens.get(0);
+				tokenName = tokenNames.get(0);
+			}
 			
 			if(!table.containsKey(left)){
 				/*(if(!ParserGenerator.getAllTerminals(rules).contains(left)){
@@ -82,8 +86,11 @@ public class LL1Parser {
 				HashMap<String,String> row = table.get(left);
 				
 				/* Error check */
-				if(!row.containsKey(token) && !row.containsKey(tokenName)){
+				if(!row.containsKey(token) && !row.containsKey(tokenName) && !token.equals("")){
 					throw new Exception("ERROR -- Input token invalid: "+tokenName+" "+token);
+				}
+				if(token.equals("")){
+					token = "$";
 				}
 				
 				/* Replace nonterminal with rule */
@@ -142,12 +149,12 @@ public class LL1Parser {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		HashMap<String, HashMap<String, String>> table = ParserGenerator.generateParsingTable("test/grammar.txt");
-		Scanner scan = new Scanner(new FileReader("test/grammar.txt"));
+		HashMap<String, HashMap<String, String>> table = ParserGenerator.generateParsingTable("test/testGrammar.txt");
+		Scanner scan = new Scanner(new FileReader("test/testGrammar.txt"));
 		String line = scan.nextLine();
 		String first_rule = line.substring(0,line.indexOf(" ::= "));
 		
-		parse(table, "test/phase2output.txt", first_rule);
+		parse(table, "test/simpleInput.txt", first_rule);
 	}
 	
 }
