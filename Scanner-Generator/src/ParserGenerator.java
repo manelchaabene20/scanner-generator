@@ -315,10 +315,21 @@ public class ParserGenerator {
 							else{
 								/* Add the First(Xi+1) to Follow(Xi) */
 								for(String firstSymbol: first.get(immediatelyFollowing)){
+									if(firstSymbol.equals("<epsilon>")){
+										for(String followSymbol: follow.get(left)){
+											if(!symbols.contains(followSymbol)){
+												symbols.add(followSymbol);
+												changes = true;
+											}
+										}
+									}
+									
 									/* Add the First(Xi+1....Xn) to the Follow(Xi) */
-									if(!firstSymbol.equals("<epsilon>") && !symbols.contains(firstSymbol)){
-										symbols.add(firstSymbol);
-										changes = true;
+									else{
+										if(!symbols.contains(firstSymbol)){
+											symbols.add(firstSymbol);
+											changes = true;
+										}										
 									}								
 								}
 							}

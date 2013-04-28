@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class LL1Parser {
@@ -12,14 +13,14 @@ public class LL1Parser {
 	 * @param table The generated Parsing Table
 	 * @throws Exception 
 	 */
-	public static void parse(HashMap<String, HashMap<String, String>> table, String tokenFile) throws Exception{
+	public static void parse(HashMap<String, HashMap<String, String>> table, String tokenFile, String first_rule) throws Exception{
 		ArrayList<String> tokens = getTokens(tokenFile);
 		ArrayList<String> tokenNames = getTokenNames(tokenFile);
 		Stack<String> stack = new Stack<String>();
 		stack.push("$");
 		
 		/* TEMPORARY: hard code start rule */
-		String left = "<MiniRE-program>";
+		String left = first_rule;
 		stack.push(left);
 		
 		while(true){
@@ -142,7 +143,11 @@ public class LL1Parser {
 	
 	public static void main(String[] args) throws Exception{
 		HashMap<String, HashMap<String, String>> table = ParserGenerator.generateParsingTable("test/grammar.txt");
-		parse(table, "test/phase2output.txt");
+		Scanner scan = new Scanner(new FileReader("test/grammar.txt"));
+		String line = scan.nextLine();
+		String first_rule = line.substring(0,line.indexOf(" ::= "));
+		
+		parse(table, "test/phase2output.txt", first_rule);
 	}
 	
 }
