@@ -1,7 +1,9 @@
 <exp> ::= <term> <exp'>
-<exp'> ::= <addop> <term> <exp'> | <epsilon>
+<exp'> ::= <addop> <term> <exp'>
+<exp'> ::= <epsilon>
 <addop> ::= + | -
 <term> ::= <factor> <term'> 
-<term'> ::= <mulop> <factor> <term'> | <epsilon>
+<term'> ::= <mulop> <factor> <term'>
+<term'> ::= <epsilon>
 <mulop> ::= *
 <factor> ::= ( <exp> ) | number
