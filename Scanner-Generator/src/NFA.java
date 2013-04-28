@@ -10,6 +10,8 @@ public class NFA {
 	private boolean isStar = false;
 	private Node plusAccept = null;
 	private boolean isPlus = false;
+	private boolean reversePlus = false;
+	private Node reversePlusAccept = null;
 
 	public NFA(Node node){
 		this.startState = node;
@@ -45,6 +47,8 @@ public class NFA {
 			while(index < accepted.length()){
 				c = accepted.charAt(index);
 				if(c == '\\'){
+					index++;
+					str.add(accepted.charAt(index));
 					index++;
 				}
 				else{
@@ -339,6 +343,9 @@ public class NFA {
 		nfa1.startState.accept = false;
 		nfa1.acceptState.accept = false;
 		nfa1.acceptState.addSuccessor(nfa2.startState);
+		if(nfa2.reversePlus){
+			nfa1.acceptState.addSuccessor(nfa2.reversePlusAccept);
+		}
 		if(nfa2.isStar){
 			nfa1.acceptState.accept = true;
 			nfa1.plusAccept = nfa1.acceptState;
@@ -346,6 +353,10 @@ public class NFA {
 		}
 		else{
 			nfa1.acceptState.accept = false;
+		}
+		if(nfa1.isStar){
+			nfa1.reversePlus = true;
+			nfa1.reversePlusAccept = nfa2.startState;
 		}
 		if(nfa1.isPlus){
 			nfa1.plusAccept.addSuccessor(nfa2.startState);

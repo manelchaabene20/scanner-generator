@@ -28,54 +28,45 @@ public class TableWalker {
 		String output = "";
 		/* Read input file line by line */
 		while ((currLine = inputReader.readLine()) != null) {
-			String[] tokens = currLine.split(" ");
-			for (String s : tokens) {
-				////System.out.println(s);
-				boolean accepted = false;
-				String temp = s;
-				int length = s.length();
-				int index = temp.length() - 1;
-				while(s.length() > 0 || !accepted){
-					while(accepted == false || temp.length() > 0){
-						for (String name : nfas.keySet()) {
-							NFA nfa = nfas.get(name);
-							//System.out.println("temp "+temp);
-							//System.out.println("acc?"+NFA.accepted(temp, nfa.getStartState()));
-							if (NFA.accepted(temp, nfa.getStartState())) {
-								// Put this println into a file
-								////System.out.println(name.substring(1) + " " + temp);
-								output += name.substring(1) + " " + temp + "\n";
-	
-								accepted = true;
-								
-							}
-						}
-						if(!accepted){
-							index--;	
-							
-							if(index <= -1){
-								throw new Exception("Error in input! Invalid character sequence! "+s);
-							}
-							
-							temp = s.substring(0, index);
-						}
-						else{
+			String line = currLine;
+			String toTry = line;
+			boolean accepted = false;
+			while(line.length() > 0){
+				while(toTry.length() >= 0) {
+					for (String name : nfas.keySet()) {
+						NFA nfa = nfas.get(name);
+						if (NFA.accepted(toTry, nfa.getStartState())) {
+							output += name.substring(1) + " " + toTry + "\n";
+							accepted = true;
 							break;
 						}
 					}
-					if(accepted = true && !s.equals(temp)){
-						s = s.substring(temp.length());
-						index = s.length();
-						temp = s;
-						accepted = false;
+					if(toTry.length() == 0){
+						throw new Exception();
 					}
-					else
+					if(accepted){
 						break;
-					
+					}
+					else{
+						toTry = toTry.substring(0, toTry.length() - 1);
+					}
+				}
+				if(accepted){
 					
 				}
+				accepted = false;
+				if(toTry.length() == line.length()){
+					break;
+				}
+				System.out.println("----------");
+				System.out.println(toTry);
+				System.out.println(line);
+				toTry = line.substring(toTry.length()).trim();
+				line = toTry;
+				System.out.println(toTry);
+				System.out.println(line);
+				
 			}
-
 		}
 
 		out.println(output);

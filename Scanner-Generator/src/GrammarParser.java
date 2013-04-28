@@ -115,6 +115,7 @@ public class GrammarParser {
 		return terminals;
 	}
 	
+	
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
 		ArrayList<String> out = new ArrayList<String>();
 		ArrayList<String> tokens = getTokens(nonTerminal.trim());
