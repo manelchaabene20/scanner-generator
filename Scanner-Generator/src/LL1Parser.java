@@ -112,6 +112,7 @@ public class LL1Parser {
 		String currLine;
 		
 		while ((currLine = tokenReader.readLine()) != null){
+			if(currLine.equals("")) break;
 			int space = currLine.indexOf(" ");
 			String name = currLine.substring(0,space);
 			String token = currLine.substring(space+1);
@@ -129,6 +130,7 @@ public class LL1Parser {
 		String currLine;
 		
 		while ((currLine = tokenReader.readLine()) != null){
+			if(currLine.equals("")) break;
 			int space = currLine.indexOf(" ");
 			String name = currLine.substring(0,space);
 			String token = currLine.substring(space+1);
