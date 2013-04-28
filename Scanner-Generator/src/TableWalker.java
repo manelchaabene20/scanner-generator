@@ -37,7 +37,7 @@ public class TableWalker {
 						NFA nfa = nfas.get(name);
 						if (NFA.accepted(toTry, nfa.getStartState())) {
 							output += name.substring(1) + " " + toTry + "\n";
-							accepted = true;
+							accepted = true;		
 							break;
 						}
 					}

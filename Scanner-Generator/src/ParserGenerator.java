@@ -1,12 +1,50 @@
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class GrammarParser {
-	public static void main(String[] args) throws IOException{
+public class ParserGenerator {
+	
+	public static HashMap<String, HashMap<String, String>> generateParsingTable(String grammarFile) throws Exception{
+		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
+		
+		String currLine;
+		
+		HashMap<String, ArrayList<String>> rules = new HashMap<String, ArrayList<String>>();
+		String first_rule = "";
+		
+		while ((currLine = grammarReader.readLine()) != null){
+			String[] line = currLine.split(" ::= ");
+			String left = line[0];
+			if(first_rule.equals("")){
+				first_rule = left;
+			}
+			
+			String[] right = line[1].split(" \\| ");
+			
+			ArrayList<String> r = new ArrayList<String>();
+			for(String rule: right){
+				r.add(rule);
+			}
+			if(rules.get(left) != null){
+				for(String alreadyRule : rules.get(left)){
+					r.add(alreadyRule);
+				}
+			}
+			rules.put(left, r);			
+		}
+
+		HashMap<String, ArrayList<String>> firstSet =  FirstSet(rules);
+		HashMap<String, ArrayList<String>> followSet = FollowSet(rules, firstSet, first_rule);
+		HashMap<String, HashMap<String, String>> table = ParsingTable(rules, followSet);
+
+		return table;
+	}
+	
+	public static void main(String[] args) throws Exception{
 		String grammarFile = "test/grammar.txt";
 		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
 		
@@ -75,16 +113,71 @@ public class GrammarParser {
 			System.out.println();
 
 		}
-
 		
+		HashMap<String, HashMap<String, String>> table = ParsingTable(rules, followSet);
+		System.out.println("---------------------------------------------------");
+		System.out.println("PARSING TABLE");
+		System.out.println("---------------------------------------------------");
+		System.out.println();
+		for(String nonterminal: table.keySet()){
+			System.out.println("ROW "+nonterminal);
+			for(String terminal: table.get(nonterminal).keySet()){
+				if(!table.get(nonterminal).get(terminal).equals("")){
+					System.out.println(terminal+": "+table.get(nonterminal).get(terminal));	
+				}
+			}
+			System.out.println();
+			System.out.println();
+		}
 		
 	}
 	
-	public static HashMap<String, HashMap<String, String>> ParsingTable(HashMap<String,String> rules, HashMap<String, ArrayList<String>> first, HashMap<String, ArrayList<String>> follow){
+	public static HashMap<String, HashMap<String, String>> ParsingTable(HashMap<String,ArrayList<String>> rules, HashMap<String, ArrayList<String>> follow) throws Exception{
 		HashMap<String, HashMap<String, String>> table = new HashMap<String, HashMap<String, String>>();
 		
+		ArrayList<String> nonterminals = getAllNonterminals(rules);
+		ArrayList<String> terminals = getAllTerminals(rules);
 		
+		/* Initialize */
+		for(String nonterminal: nonterminals){			
+			HashMap<String, String> row = new HashMap<String, String>();
+			for(String terminal: terminals){		
+				row.put(terminal, "");				
+			}
+			row.put("$", "");
+			table.put(nonterminal, row);
+		}
 		
+		/* Run algorithm */
+		for (String left: rules.keySet()){
+			for(String right: rules.get(left)){
+				ArrayList<String> firstSet = first(right, rules);
+				for(String symbol: firstSet){
+					
+					/* Check for ERROR */
+					if(!table.get(left).get(symbol).equals("")){
+						throw new Exception("ERROR -- grammar is not LL(1) -- duplicate rules in table entry: \n"+table.get(left).get(symbol)+"\n"+right);
+					}
+					/* Check for epsilon in First set */
+					else if(symbol.equals("<epsilon>")){
+						ArrayList<String> followSet = follow.get(left);
+						for(String f: followSet){
+							/* Check for ERROR */
+							if(!table.get(left).get(f).equals("")){
+								throw new Exception("ERROR -- grammar is not LL(1) -- duplicate rules in table entry: \n"+table.get(left).get(f)+"\n"+symbol);
+							}
+							else{
+								table.get(left).put(f, symbol);
+							}
+						}
+					}
+					else{
+						table.get(left).put(symbol, right);
+					}
+				}
+				
+			}
+		}
 		
 		return table;
 	}
@@ -118,7 +211,7 @@ public class GrammarParser {
 	
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
 		ArrayList<String> out = new ArrayList<String>();
-		ArrayList<String> tokens = getTokens(nonTerminal.trim());
+		ArrayList<String> tokens = getTokens(nonTerminal);
 		
 		if(tokens.get(0).equals("<epsilon>")){
 			out.add("<epsilon>");
@@ -222,23 +315,10 @@ public class GrammarParser {
 							else{
 								/* Add the First(Xi+1) to Follow(Xi) */
 								for(String firstSymbol: first.get(immediatelyFollowing)){
-									
-									/* If epsilon is in First(Xi+1...Xn) then add the Follow(X) */
-									if(firstSymbol.equals("<epsilon>")){
-										
-										for(String followSymbol: follow.get(left)){
-											if(!symbols.contains(followSymbol)){
-												symbols.add(followSymbol);
-												changes = true;
-											}
-										}
-									}
-									else{
-										/* Add the First(Xi+1....Xn) to the Follow(Xi) */
-										if(!symbols.contains(firstSymbol)){
-											symbols.add(firstSymbol);
-											changes = true;
-										}
+									/* Add the First(Xi+1....Xn) to the Follow(Xi) */
+									if(!firstSymbol.equals("<epsilon>") && !symbols.contains(firstSymbol)){
+										symbols.add(firstSymbol);
+										changes = true;
 									}								
 								}
 							}
