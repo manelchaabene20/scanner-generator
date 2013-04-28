@@ -1,0 +1,7 @@
+NUMBER number
+PLUS +
+LEFTPAREN (
+NUMBER number
+MULTIPLY *
+NUMBER number
+RIGHTPAREN )

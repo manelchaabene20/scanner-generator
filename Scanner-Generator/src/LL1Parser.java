@@ -23,8 +23,29 @@ public class LL1Parser {
 		stack.push(left);
 		
 		while(true){
+			/* Print contents of input */
+			System.out.print("Input: ");
+			for(String s: tokens){
+				System.out.print(s+" ");
+			}
+			System.out.print("$");
+			System.out.println();
+			
+			/* Print contents of stack */
+			System.out.print("Stack: ");
+			Stack<String> printStack = new Stack<String>();
+			while(!stack.isEmpty()){
+				String s = stack.pop();
+				System.out.print(s+" ");
+				printStack.push(s);
+			}
+			while(!printStack.isEmpty()){
+				stack.push(printStack.pop());
+			}
+			System.out.println();
+			System.out.println();
+			
 			left = stack.pop();
-			System.out.println("left: "+left);
 			
 			if(left.equals("$")){
 				if(tokens.size() > 0){
@@ -75,7 +96,6 @@ public class LL1Parser {
 					/* Push the right hand side in reverse (so it gets popped off in order) */
 					String rt = rightTokens.get(i);
 					stack.push(rt);
-					System.out.println("push: "+rt);
 				}
 			}
 			
