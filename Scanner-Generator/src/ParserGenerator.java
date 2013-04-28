@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,6 +7,43 @@ import java.util.HashMap;
 
 
 public class ParserGenerator {
+	
+	public static HashMap<String, HashMap<String, String>> generateParsingTable(String grammarFile) throws Exception{
+		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
+		
+		String currLine;
+		
+		HashMap<String, ArrayList<String>> rules = new HashMap<String, ArrayList<String>>();
+		String first_rule = "";
+		
+		while ((currLine = grammarReader.readLine()) != null){
+			String[] line = currLine.split(" ::= ");
+			String left = line[0];
+			if(first_rule.equals("")){
+				first_rule = left;
+			}
+			
+			String[] right = line[1].split(" \\| ");
+			
+			ArrayList<String> r = new ArrayList<String>();
+			for(String rule: right){
+				r.add(rule);
+			}
+			if(rules.get(left) != null){
+				for(String alreadyRule : rules.get(left)){
+					r.add(alreadyRule);
+				}
+			}
+			rules.put(left, r);			
+		}
+
+		HashMap<String, ArrayList<String>> firstSet =  FirstSet(rules);
+		HashMap<String, ArrayList<String>> followSet = FollowSet(rules, firstSet, first_rule);
+		HashMap<String, HashMap<String, String>> table = ParsingTable(rules, followSet);
+
+		return table;
+	}
+	
 	public static void main(String[] args) throws Exception{
 		String grammarFile = "test/grammar.txt";
 		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
