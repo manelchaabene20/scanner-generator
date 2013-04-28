@@ -47,7 +47,7 @@ public class TableWalker {
 								output += name.substring(1) + " " + temp + "\n";
 	
 								accepted = true;
-								
+								break;
 							}
 						}
 						if(!accepted){
