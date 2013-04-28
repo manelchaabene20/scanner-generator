@@ -157,7 +157,7 @@ public class RecursiveDescentParser {
 			}
 		}
 		else{
-			System.out.println("s: "+s);
+			
 			if(!s.equals("") && nfas.containsKey(s)){
 				//System.out.println("NFA "+s);
 				return NFA.clone(nfas.get(s));

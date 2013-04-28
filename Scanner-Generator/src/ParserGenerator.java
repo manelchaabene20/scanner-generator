@@ -45,7 +45,7 @@ public class ParserGenerator {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		String grammarFile = "test/grammar.txt";
+		String grammarFile = "test/testGrammar.txt";
 		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
 		
 		String currLine;

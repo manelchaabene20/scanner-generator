@@ -1,4 +1,4 @@
-<exp> ::= <term> <exp'> 
+<exp> ::= <term> <exp'>
 <exp'> ::= <addop> <term> <exp'> | <epsilon>
 <addop> ::= + | -
 <term> ::= <factor> <term'> 

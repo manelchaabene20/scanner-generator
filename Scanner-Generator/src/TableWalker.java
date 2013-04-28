@@ -58,13 +58,10 @@ public class TableWalker {
 				if(toTry.length() == line.length()){
 					break;
 				}
-				System.out.println("----------");
-				System.out.println(toTry);
-				System.out.println(line);
+
 				toTry = line.substring(toTry.length()).trim();
 				line = toTry;
-				System.out.println(toTry);
-				System.out.println(line);
+
 				
 			}
 		}
