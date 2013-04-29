@@ -1,11 +1,14 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class LL1Parser {
+	
 	/**
 	 * Parses through the given input file using the parsing table
 	 * Throws an error if input is invalid; does nothing if the input is valid
@@ -14,6 +17,10 @@ public class LL1Parser {
 	 * @throws Exception 
 	 */
 	public static void parse(HashMap<String, HashMap<String, String>> table, String tokenFile, String first_rule) throws Exception{
+		
+		PrintWriter out = new PrintWriter(new FileWriter("stackOutput.txt"));
+		String output = "";
+		
 		ArrayList<String> tokens = getTokens(tokenFile);
 		ArrayList<String> tokenNames = getTokenNames(tokenFile);
 		Stack<String> stack = new Stack<String>();
@@ -25,26 +32,24 @@ public class LL1Parser {
 		
 		while(true){
 			/* Print contents of input */
-			System.out.print("Input: ");
+			output += "Input: ";
 			for(String s: tokens){
-				System.out.print(s+" ");
+				output += s+" ";
 			}
-			System.out.print("$");
-			System.out.println();
+			output += "$\n";
 			
 			/* Print contents of stack */
-			System.out.print("Stack: ");
+			output += "Stack: ";
 			Stack<String> printStack = new Stack<String>();
 			while(!stack.isEmpty()){
 				String s = stack.pop();
-				System.out.print(s+" ");
+				output += s+" ";
 				printStack.push(s);
 			}
 			while(!printStack.isEmpty()){
 				stack.push(printStack.pop());
 			}
-			System.out.println();
-			System.out.println();
+			output += "\n\n";
 			
 			left = stack.pop();
 			
@@ -53,7 +58,7 @@ public class LL1Parser {
 					throw new Exception("Error! -- stack empty (just $) but input still has "+tokens.size()+" tokens!");
 				}
 				
-				System.out.println("PARSING SUCCESS!!!!");
+				output += "PARSING SUCCESS!!!!\n";
 				break;
 				
 			}
@@ -108,7 +113,9 @@ public class LL1Parser {
 			}
 			
 		}
-			
+		
+		out.println(output);
+		out.close();
 		
 	}
 	
@@ -148,6 +155,7 @@ public class LL1Parser {
 		return tokenNames;
 	}
 	
+	/** Main for testing purposes **/
 	public static void main(String[] args) throws Exception{
 		HashMap<String, HashMap<String, String>> table = ParserGenerator.generateParsingTable("test/testGrammar.txt");
 		Scanner scan = new Scanner(new FileReader("test/testGrammar.txt"));

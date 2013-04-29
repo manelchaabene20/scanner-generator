@@ -1,0 +1,194 @@
+Input: begin matches = find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <MiniRE-program> $ 
+
+Input: begin matches = find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: begin <statement-list> end $ 
+
+Input: matches = find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement-list> end $ 
+
+Input: matches = find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement> <statement-list-tail> end $ 
+
+Input: matches = find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ID = <statement-righthand> ; <statement-list-tail> end $ 
+
+Input: = find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: = <statement-righthand> ; <statement-list-tail> end $ 
+
+Input: find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement-righthand> ; <statement-list-tail> end $ 
+
+Input: find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <exp> ; <statement-list-tail> end $ 
+
+Input: find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <term> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: find '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: find REGEX in <file-name> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: '([A-Z a-z])*ment([A-Z a-z])*' in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: REGEX in <file-name> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: in "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: in <file-name> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <file-name> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: "input1.txt" inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ASCII-STR <exp-tail> ; <statement-list-tail> end $ 
+
+Input: inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <exp-tail> ; <statement-list-tail> end $ 
+
+Input: inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <bin-op> <term> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: inters find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: inters <term> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <term> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: find '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: find REGEX in <file-name> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: '(A|a) ([A-Z a-z])*' in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: REGEX in <file-name> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: in "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: in <file-name> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <file-name> <exp-tail> ; <statement-list-tail> end $ 
+
+Input: "input2.txt" ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ASCII-STR <exp-tail> ; <statement-list-tail> end $ 
+
+Input: ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <exp-tail> ; <statement-list-tail> end $ 
+
+Input: ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <epsilon> ; <statement-list-tail> end $ 
+
+Input: ; n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ; <statement-list-tail> end $ 
+
+Input: n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement-list-tail> end $ 
+
+Input: n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement> <statement-list-tail> end $ 
+
+Input: n_matches = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ID = <statement-righthand> ; <statement-list-tail> end $ 
+
+Input: = # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: = <statement-righthand> ; <statement-list-tail> end $ 
+
+Input: # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement-righthand> ; <statement-list-tail> end $ 
+
+Input: # matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: # <exp> ; <statement-list-tail> end $ 
+
+Input: matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <exp> ; <statement-list-tail> end $ 
+
+Input: matches ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ID ; <statement-list-tail> end $ 
+
+Input: ; print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ; <statement-list-tail> end $ 
+
+Input: print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement-list-tail> end $ 
+
+Input: print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement> <statement-list-tail> end $ 
+
+Input: print ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: print ( <exp-list> ) ; <statement-list-tail> end $ 
+
+Input: ( n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ( <exp-list> ) ; <statement-list-tail> end $ 
+
+Input: n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <exp-list> ) ; <statement-list-tail> end $ 
+
+Input: n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <exp> <exp-list-tail> ) ; <statement-list-tail> end $ 
+
+Input: n_matches ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ID <exp-list-tail> ) ; <statement-list-tail> end $ 
+
+Input: ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <exp-list-tail> ) ; <statement-list-tail> end $ 
+
+Input: ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <epsilon> ) ; <statement-list-tail> end $ 
+
+Input: ) ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ) ; <statement-list-tail> end $ 
+
+Input: ; replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ; <statement-list-tail> end $ 
+
+Input: replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement-list-tail> end $ 
+
+Input: replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: <statement> <statement-list-tail> end $ 
+
+Input: replace '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: replace REGEX with ASCII-STR in <file-names> ; <statement-list-tail> end $ 
+
+Input: '([A-Z a-z])*ment' with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: REGEX with ASCII-STR in <file-names> ; <statement-list-tail> end $ 
+
+Input: with "" in "input1.txt" >! "output1.txt" ; end $
+Stack: with ASCII-STR in <file-names> ; <statement-list-tail> end $ 
+
+Input: "" in "input1.txt" >! "output1.txt" ; end $
+Stack: ASCII-STR in <file-names> ; <statement-list-tail> end $ 
+
+Input: in "input1.txt" >! "output1.txt" ; end $
+Stack: in <file-names> ; <statement-list-tail> end $ 
+
+Input: "input1.txt" >! "output1.txt" ; end $
+Stack: <file-names> ; <statement-list-tail> end $ 
+
+Input: "input1.txt" >! "output1.txt" ; end $
+Stack: <source-file> >! <destination-file> ; <statement-list-tail> end $ 
+
+Input: "input1.txt" >! "output1.txt" ; end $
+Stack: ASCII-STR >! <destination-file> ; <statement-list-tail> end $ 
+
+Input: >! "output1.txt" ; end $
+Stack: >! <destination-file> ; <statement-list-tail> end $ 
+
+Input: "output1.txt" ; end $
+Stack: <destination-file> ; <statement-list-tail> end $ 
+
+Input: "output1.txt" ; end $
+Stack: ASCII-STR ; <statement-list-tail> end $ 
+
+Input: ; end $
+Stack: ; <statement-list-tail> end $ 
+
+Input: end $
+Stack: <statement-list-tail> end $ 
+
+Input: end $
+Stack: <epsilon> end $ 
+
+Input: end $
+Stack: end $ 
+
+Input: $
+Stack: $ 
+
+PARSING SUCCESS!!!!
+

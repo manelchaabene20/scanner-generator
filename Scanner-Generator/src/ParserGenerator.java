@@ -8,6 +8,13 @@ import java.util.HashMap;
 
 public class ParserGenerator {
 	
+	/**
+	 * Generates a parsing table for the given grammar file
+	 * 
+	 * @param grammarFile
+	 * @return parsing table
+	 * @throws Exception
+	 */
 	public static HashMap<String, HashMap<String, String>> generateParsingTable(String grammarFile) throws Exception{
 		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
 		
@@ -44,94 +51,14 @@ public class ParserGenerator {
 		return table;
 	}
 	
-	public static void main(String[] args) throws Exception{
-		String grammarFile = "test/testGrammar.txt";
-		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
-		
-		String currLine;
-		
-		HashMap<String, ArrayList<String>> rules = new HashMap<String, ArrayList<String>>();
-		String first_rule = "";
-		
-		while ((currLine = grammarReader.readLine()) != null){
-			String[] line = currLine.split(" ::= ");
-			String left = line[0];
-			if(first_rule.equals("")){
-				first_rule = left;
-			}
-			
-			String[] right = line[1].split(" \\| ");
-			
-			ArrayList<String> r = new ArrayList<String>();
-			for(String rule: right){
-				r.add(rule);
-			}
-			if(rules.get(left) != null){
-				for(String alreadyRule : rules.get(left)){
-					r.add(alreadyRule);
-				}
-			}
-			rules.put(left, r);			
-		}
-
-
-		HashMap<String, ArrayList<String>> firstSet =  FirstSet(rules);
-		System.out.println("---------------------------------------------------");
-		System.out.println("First Set");
-		System.out.println("---------------------------------------------------");
-		for(String left: firstSet.keySet()){
-			System.out.println("RULE: "+left);
-			System.out.print("{");
-			for(int i=0; i<firstSet.get(left).size(); i++){
-				String symbol = firstSet.get(left).get(i);
-				if(i == firstSet.get(left).size()-1)
-					System.out.print(symbol);
-				else
-					System.out.print(symbol+", ");
-			}
-			System.out.print("}");
-			System.out.println();
-			System.out.println();
-		}
-		System.out.println();
-		HashMap<String, ArrayList<String>> followSet = FollowSet(rules, firstSet, first_rule);
-		System.out.println("---------------------------------------------------");
-		System.out.println("Follow Set");
-		System.out.println("---------------------------------------------------");
-		for(String left: followSet.keySet()){
-			System.out.println("RULE: "+left);
-			System.out.print("{");
-			for(int i=0; i<followSet.get(left).size(); i++){
-				String symbol = followSet.get(left).get(i);
-				if(i == followSet.get(left).size()-1)
-					System.out.print(symbol);
-				else
-					System.out.print(symbol+", ");
-			}
-			System.out.print("}");
-			System.out.println();
-			System.out.println();
-
-		}
-		
-		HashMap<String, HashMap<String, String>> table = ParsingTable(rules, followSet);
-		System.out.println("---------------------------------------------------");
-		System.out.println("PARSING TABLE");
-		System.out.println("---------------------------------------------------");
-		System.out.println();
-		for(String nonterminal: table.keySet()){
-			System.out.println("ROW "+nonterminal);
-			for(String terminal: table.get(nonterminal).keySet()){
-				if(!table.get(nonterminal).get(terminal).equals("")){
-					System.out.println(terminal+": "+table.get(nonterminal).get(terminal));	
-				}
-			}
-			System.out.println();
-			System.out.println();
-		}
-		
-	}
-	
+	/** 
+	 * Constructs a parsing table for the given grammar rules and follow set
+	 * 
+	 * @param rules
+	 * @param follow
+	 * @return
+	 * @throws Exception
+	 */
 	public static HashMap<String, HashMap<String, String>> ParsingTable(HashMap<String,ArrayList<String>> rules, HashMap<String, ArrayList<String>> follow) throws Exception{
 		HashMap<String, HashMap<String, String>> table = new HashMap<String, HashMap<String, String>>();
 		
@@ -182,6 +109,12 @@ public class ParserGenerator {
 		return table;
 	}
 	
+	/**
+	 * Gets all nonterminals from the given grammar rules
+	 * 
+	 * @param rules
+	 * @return list of nonterminals
+	 */
 	public static ArrayList<String> getAllNonterminals(HashMap<String,ArrayList<String>> rules){
 		ArrayList<String> nonterminals = new ArrayList<String>();
 		for(String left: rules.keySet()){
@@ -191,6 +124,12 @@ public class ParserGenerator {
 		return nonterminals;
 	}
 	
+	/**
+	 * Gets all terminals from the given grammar rules
+	 * 
+	 * @param rules
+	 * @return list of terminals
+	 */
 	public static ArrayList<String> getAllTerminals(HashMap<String,ArrayList<String>> rules){
 		ArrayList<String> terminals = new ArrayList<String>();
 		for(String left: rules.keySet()){
@@ -208,7 +147,13 @@ public class ParserGenerator {
 		return terminals;
 	}
 	
-	
+	/**
+	 * Calculates the first set of a single grammar rule
+	 * 
+	 * @param nonTerminal
+	 * @param rules
+	 * @return first set
+	 */
 	public static ArrayList<String> first(String nonTerminal, HashMap<String, ArrayList<String>> rules){
 		ArrayList<String> out = new ArrayList<String>();
 		ArrayList<String> tokens = getTokens(nonTerminal);
@@ -234,6 +179,13 @@ public class ParserGenerator {
 		}
 		return out;
 	}
+	
+	/**
+	 * Returns the First Set for the entire grammar
+	 * 
+	 * @param rules
+	 * @return entire first set
+	 */
 	public static HashMap<String, ArrayList<String>> FirstSet(HashMap<String, ArrayList<String>> rules){
 		HashMap<String, ArrayList<String>> firstSet = new HashMap<String, ArrayList<String>>();
 		for(String s : rules.keySet()){
@@ -247,7 +199,14 @@ public class ParserGenerator {
 	}
 	
 
-	
+	/**
+	 * Generates the entire follow set for grammar rules
+	 * 
+	 * @param rules
+	 * @param first
+	 * @param first_rule
+	 * @return follow set
+	 */
 	public static HashMap<String, ArrayList<String>> FollowSet(HashMap<String, ArrayList<String>> rules, HashMap<String, ArrayList<String>> first, String first_rule){
 		HashMap<String, ArrayList<String>> follow = new HashMap<String, ArrayList<String>>();
 
@@ -348,6 +307,12 @@ public class ParserGenerator {
 		return follow;
 	}
 
+	/**
+	 * Gets the nonterminals for the right hand side of a single rule 
+	 * 
+	 * @param s the right hand side of a rule
+	 * @return list of nonterminals
+	 */
 	public static ArrayList<String> getNonterminals(String s){
 		ArrayList<String> nonterminals = new ArrayList<String>();
 		while(true){
@@ -363,6 +328,12 @@ public class ParserGenerator {
 		return nonterminals;
 	}
 	
+	/**
+	 * Gets all of the tokens for a given string (all terminals and nonterminals
+	 * 
+	 * @param s 
+	 * @return list of tokens
+	 */
 	public static ArrayList<String> getTokens(String s){
 		s = s.trim();
 		ArrayList<String> tokens = new ArrayList<String>();
@@ -393,6 +364,96 @@ public class ParserGenerator {
 			
 		}
 		return tokens;
+	}
+	
+
+	/** Main for testing purposes **/
+	public static void main(String[] args) throws Exception{
+		String grammarFile = "test/testGrammar.txt";
+		BufferedReader grammarReader = new BufferedReader(new FileReader(grammarFile));
+		
+		String currLine;
+		
+		HashMap<String, ArrayList<String>> rules = new HashMap<String, ArrayList<String>>();
+		String first_rule = "";
+		
+		while ((currLine = grammarReader.readLine()) != null){
+			String[] line = currLine.split(" ::= ");
+			String left = line[0];
+			if(first_rule.equals("")){
+				first_rule = left;
+			}
+			
+			String[] right = line[1].split(" \\| ");
+			
+			ArrayList<String> r = new ArrayList<String>();
+			for(String rule: right){
+				r.add(rule);
+			}
+			if(rules.get(left) != null){
+				for(String alreadyRule : rules.get(left)){
+					r.add(alreadyRule);
+				}
+			}
+			rules.put(left, r);			
+		}
+
+
+		HashMap<String, ArrayList<String>> firstSet =  FirstSet(rules);
+		System.out.println("---------------------------------------------------");
+		System.out.println("First Set");
+		System.out.println("---------------------------------------------------");
+		for(String left: firstSet.keySet()){
+			System.out.println("RULE: "+left);
+			System.out.print("{");
+			for(int i=0; i<firstSet.get(left).size(); i++){
+				String symbol = firstSet.get(left).get(i);
+				if(i == firstSet.get(left).size()-1)
+					System.out.print(symbol);
+				else
+					System.out.print(symbol+", ");
+			}
+			System.out.print("}");
+			System.out.println();
+			System.out.println();
+		}
+		System.out.println();
+		HashMap<String, ArrayList<String>> followSet = FollowSet(rules, firstSet, first_rule);
+		System.out.println("---------------------------------------------------");
+		System.out.println("Follow Set");
+		System.out.println("---------------------------------------------------");
+		for(String left: followSet.keySet()){
+			System.out.println("RULE: "+left);
+			System.out.print("{");
+			for(int i=0; i<followSet.get(left).size(); i++){
+				String symbol = followSet.get(left).get(i);
+				if(i == followSet.get(left).size()-1)
+					System.out.print(symbol);
+				else
+					System.out.print(symbol+", ");
+			}
+			System.out.print("}");
+			System.out.println();
+			System.out.println();
+
+		}
+		
+		HashMap<String, HashMap<String, String>> table = ParsingTable(rules, followSet);
+		System.out.println("---------------------------------------------------");
+		System.out.println("PARSING TABLE");
+		System.out.println("---------------------------------------------------");
+		System.out.println();
+		for(String nonterminal: table.keySet()){
+			System.out.println("ROW "+nonterminal);
+			for(String terminal: table.get(nonterminal).keySet()){
+				if(!table.get(nonterminal).get(terminal).equals("")){
+					System.out.println(terminal+": "+table.get(nonterminal).get(terminal));	
+				}
+			}
+			System.out.println();
+			System.out.println();
+		}
+		
 	}
 	
 	
